@@ -37,20 +37,40 @@ require("Engine")
 require("Game")
 
 local GENERATE_GLOBALS_LIST = false
+local SERVER_URL, PORT = "server.rit.agori.dev", 1337
 
 function love.load(args)
-    if args and (args[1] or "") == "-globals" then
-        GENERATE_GLOBALS_LIST = true
+    if args then
+        --[[ if (args[1] or "") == "-globals" then
+            GENERATE_GLOBALS_LIST = true
+        end
+        if (args[2] or "") == "-localhost" then
+            SERVER_URL = "localhost"
+        end ]]
+        if table.find(args, "-globals") then
+            GENERATE_GLOBALS_LIST = true
+        end
+
+        if table.find(args, "-localhost") then
+            SERVER_URL = "localhost"
+        end
     end
+
+    NetworkingClientThread:start(SERVER_URL, PORT)
 
     os.execute = function() print("os.execute is disabled") end
     os.exit = function() print("os.exit is disabled") end
     os.remove = function() print("os.remove is disabled") end
     os.rename = function() print("os.rename is disabled") end
     os.setlocale = function() print("os.setlocale is disabled") end
+
+    ImGUI.love.Init("RGBA32")
 end
 
 function love.update(dt)
+    ImGUI.love.Update(dt)
+    ImGUI.NewFrame()
+    
     Input:update()
     Cache:update()
     Game:update(dt)
@@ -63,6 +83,13 @@ function love.update(dt)
             DiscordRPC.runCallbacks()
         end
     end
+
+    local msg = NetworkingClient:getMessage()
+    if msg then
+        if msg.action == "gotServers" then
+            print(table.format(msg))
+        end
+    end
 end
 
 function love.resize(w, h)
@@ -72,16 +99,28 @@ function love.resize(w, h)
 end
 
 function love.keypressed(key, scancode, isrepeat)
+    ImGUI.love.KeyPressed(key)
+    if ImGUI.love.GetWantCaptureKeyboard() then
+        return
+    end
     Input:keypressed(key)
     Game:keypressed(key, scancode, isrepeat)
 end
 
 function love.keyreleased(key, scancode)
+    ImGUI.love.KeyReleased(key)
+    if ImGUI.love.GetWantCaptureKeyboard() then
+        return
+    end
     Input:keyreleased(key)
     Game:keyreleased(key, scancode)
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
+    ImGUI.love.MousePressed(button)
+    if ImGUI.love.GetWantCaptureMouse() then
+        return
+    end
     local ok = true
     for _, substate in ipairs(Game._substates) do
         if substate:mousepressed(x, y, button) then
@@ -100,6 +139,10 @@ function love.mousepressed(x, y, button, istouch, presses)
 end
 
 function love.mousereleased(x, y, button, istouch, presses)
+    ImGUI.love.MouseReleased(button)
+    if ImGUI.love.GetWantCaptureMouse() then
+        return
+    end
     Game:mousereleased(x, y, button, istouch, presses)
     Input:mousereleased(button)
 
@@ -109,10 +152,18 @@ function love.mousereleased(x, y, button, istouch, presses)
 end
 
 function love.wheelmoved(x, y)
+    ImGUI.love.WheelMoved(x, y)
+    if ImGUI.love.GetWantCaptureMouse() then
+        return
+    end
     Game:wheelmoved(x, y)
 end
 
 function love.mousemoved(x, y, dx, dy, istouch)
+    ImGUI.love.MouseMoved(x, y)
+    if ImGUI.love.GetWantCaptureMouse() then
+        return
+    end
     Game:mousemoved(x, y, dx, dy, istouch)
 
     if VirtualPad and VirtualPad._CURRENT and not istouch then
@@ -121,19 +172,29 @@ function love.mousemoved(x, y, dx, dy, istouch)
 end
 
 function love.textinput(t)
+    ImGUI.love.TextInput(t)
+    if ImGUI.love.GetWantCaptureKeyboard() then
+        return
+    end
     Game:textinput(t)
 end
 
 function love.draw()
     Game:draw()
 
-    if not love.system.isMobile() then return end
-    love.graphics.push()
-    love.graphics.scale(Game._windowWidth / Game._gameWidth, Game._windowHeight / Game._gameHeight)
-    if VirtualPad and VirtualPad._CURRENT then
-        VirtualPad._CURRENT:draw()
+    if not love.system.isMobile() then
+        love.graphics.push()
+        love.graphics.scale(Game._windowWidth / Game._gameWidth, Game._windowHeight / Game._gameHeight)
+        if VirtualPad and VirtualPad._CURRENT then
+            VirtualPad._CURRENT:draw()
+        end
+        love.graphics.pop()
     end
-    love.graphics.pop()
+
+    Game:renderImGUI()
+
+    ImGUI.Render()
+    ImGUI.love.RenderDrawLists()
 end
 
 function love.quit()

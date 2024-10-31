@@ -66,3 +66,4 @@ Game:initialize()
 SongManager:loadSongList()
 
 Game:SwitchState(Skin:getSkinnedState("TitleMenu"))
+--Game:SwitchState(States.Screens.Editor.MapEditor)

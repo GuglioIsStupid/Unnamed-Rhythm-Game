@@ -130,6 +130,13 @@ function Game:draw()
     end
 end
 
+function Game:renderImGUI()
+    self._currentState:renderImGUI()
+    for _, substate in ipairs(self._substates) do
+        substate:renderImGUI()
+    end
+end
+
 function Game:__updateDebug()
     if self.debug then
         if infoUpdateTimer >= infoUpdateTimerMax then
