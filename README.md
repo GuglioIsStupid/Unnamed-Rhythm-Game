@@ -38,7 +38,7 @@ Rit is a free, open-sourced rhythm game made in Lua using the LÖVE framework. T
 
 To contribute to this project, please follow the steps below:
 - Maintain a clean and consistent code style
-- Submit a pull request to the `Rewrite` branch explaining the changes you made
+- Submit a pull request to the `Main` branch explaining the changes you made
 
 ## License
 
@@ -47,7 +47,7 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 ## Credits
 
 ### External Contributors
-- [Getsaa](https://twitter.com/GetsaaNG) - UI/UX Design, Rit's Branding
+- [Getsaa](https://twitter.com/getsaa_xyz) - UI/UX Design, Rit's Branding
 - [Lumaah](https://github.com/Lumaah) - French translation
 - [Getkirill](https://github.com/getkirill) - Deprecated .ps1 makefile port
 

@@ -76,12 +76,6 @@ function SongCache:loadCache(filename, ogPath, fileExt)
             songData.metaType = 3
             songData.game_mode = "Mania"
             return songData
-        --[[ elseif fileExt == ".ritm" then
-            local data = love.filesystem.read(ogPath)
-            local songData = Parsers.RitM:cache(data, filename, ogPath)
-            songData.metaType = 2
-            songData.game_mode = "Mobile"
-            return songData ]]
         end
     end
 end
@@ -110,12 +104,6 @@ function SongCache:loadSongsPath(path)
                     local fileExt = ".ritc"
                     
                     self:loadCache(filename, fullPath, fileExt)
-                --[[ elseif song:endsWith(".ritm") then
-                    local filename = song:gsub(".ritm$", "")
-                    local fullPath = path .. "/" .. file .. "/" .. song
-                    local fileExt = ".ritm"
-                    
-                    self:loadCache(filename, fullPath, fileExt) ]]
                 end
             end
         elseif fileType == "file" then

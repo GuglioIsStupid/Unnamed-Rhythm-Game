@@ -5,6 +5,7 @@ gitbuilds: clean lovefile win64 gitdist
 console: lovefile switch
 
 GameName = Rit
+GameVersion = $(shell cat src/Assets/Data/Version.txt)
 
 clean:
 	rm -rf build
@@ -52,7 +53,7 @@ switch: lovefile
 	rm -rf build/$(GameName)-switch
 	mkdir -p "build/$(GameName)-switch"
 
-	nacptool --create "Rit" "AGORI Studios" "$(shell cat src/Assets/Data/Version.txt)" build/$(GameName)-switch/Rit.nacp
+	nacptool --create "Rit" "AGORI Studios" "$(GameVersion)" build/$(GameName)-switch/Rit.nacp
 	mkdir build/$(GameName)-switch/romfs
 	cp build/$(GameName)-lovefile/$(GameName).love build/$(GameName)-switch/romfs/game.love
 

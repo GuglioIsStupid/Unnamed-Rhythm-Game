@@ -9,7 +9,10 @@ function Script:loadScript(path)
     end
     self.script = love.filesystem.load(path)
     -- private environment for the script
-    self.env = {print = print}
+    -- why? because we don't want the script to have access to the global environment & potential malicious code
+    self.env = {
+        print = print
+    }
     setfenv(self.script, self.env)
     self.script()
 end

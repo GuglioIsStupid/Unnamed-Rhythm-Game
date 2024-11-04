@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 local env = {
     assert = assert,
     type = type,

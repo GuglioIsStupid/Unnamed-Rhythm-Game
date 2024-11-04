@@ -389,7 +389,7 @@ function L.Shutdown()
     io = nil
     cliboard_callback_get:free()
     cliboard_callback_set:free()
-    cliboard_callback_get, cliboard_callback_set = nil
+    cliboard_callback_get, cliboard_callback_set = nil, nil
 end
 
 function L.JoystickAdded(joystick)
