@@ -1,13 +1,26 @@
 local SettingsManager = {}
 
 local settingsFilePath = "CacheData/User/Settings.rs"
+local tempSettingsFilePath = "CacheData/User/SettingsTemp.rs"
 
 love.filesystem.createDirectory("CacheData/User")
 
 local SettingsDefault = {
     Game = {
         ScrollSpeed = 70,
-        ScrollDirection = "Down"
+        ScrollDirection = "Down",
+        keybinds = {
+            " ",
+            "fj",
+            "f j",
+            "dfjk",
+            "df jk",
+            "sdfjkl",
+            "sdf jkl",
+            "asdfjkl;",
+            "asdf jkl;",
+            "asdfvnjkl;"
+        }
     },
     Audio = {
         Master = 1,
@@ -17,9 +30,9 @@ local SettingsDefault = {
 }
 
 function SettingsManager:loadSettings()
-    local exists = love.filesystem.getInfo(settingsFilePath)
+    local exists = love.filesystem.getInfo(tempSettingsFilePath)
     if exists then
-        self._settings = Json.decode(FileHandler:readEncryptedFile(settingsFilePath))
+        self._settings = Json.decode(love.filesystem.read(tempSettingsFilePath))
 
         for category, settings in pairs(SettingsDefault) do
             for setting, value in pairs(settings) do
@@ -30,8 +43,17 @@ function SettingsManager:loadSettings()
         end
     else
         FileHandler:writeEncryptedFile(settingsFilePath, Json.encode(SettingsDefault))
+        love.filesystem.write(tempSettingsFilePath, Json.encode(SettingsDefault))
 
         self._settings = SettingsDefault
+    end
+
+    -- Apply keybinds
+    for i, v in ipairs(self._settings.Game.keybinds) do
+        local new = splitInputChars(v)
+        for j, k in ipairs(new) do
+            Input:replaceInput(i .. "k" .. j, {Key(k)})
+        end
     end
 end
 

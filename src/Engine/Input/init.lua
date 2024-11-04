@@ -57,7 +57,7 @@ if love.system.isMobile() then
     VirtualPad._CURRENT = MenuPad
 end
 
-local function splitInputChars(str)
+function splitInputChars(str)
     local t = {}
     for i = 1, #str do
         t[i] = str:sub(i, i)

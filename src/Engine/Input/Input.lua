@@ -33,6 +33,21 @@ function Input:new(controls)
     self.mouseBase = Mouse(self.mouseControls)
 end
 
+function Input:replaceInput(name, new)
+    self.keyboardControls[name] = {}
+    self.mouseControls[name] = {}
+    for i, k in ipairs(new) do
+        if k:find("mouse") then
+            -- mouse controls
+            table.insert(self.mouseControls[name], k:sub(6))
+        elseif k:find("joy") then
+            -- joystick controls
+        elseif k:find("kb") then
+            table.insert(self.keyboardControls[name], k:sub(3))
+        end
+    end
+end
+
 function Input:update()
     self.keyboardBase:update()
     self.mouseBase:update()
