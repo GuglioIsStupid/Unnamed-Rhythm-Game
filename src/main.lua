@@ -75,6 +75,8 @@ function love.update(dt)
     Cache:update()
     Game:update(dt)
 
+    NetworkingHTTPSRequest.update()
+
     if DiscordRPC then
         DiscordRPC.timer = DiscordRPC.timer + dt
         if DiscordRPC.timer >= DiscordRPC.maxTimer then
