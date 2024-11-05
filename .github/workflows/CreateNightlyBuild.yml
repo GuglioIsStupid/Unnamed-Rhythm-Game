@@ -20,7 +20,7 @@ jobs:
         - name: Nightly Release
           run: |
             sudo apt install libfuse2
-            make gitbuilds
+            make gitbuilds git_sha=${{ github.sha }}
             
         - uses: andelf/nightly-release@main
           with:

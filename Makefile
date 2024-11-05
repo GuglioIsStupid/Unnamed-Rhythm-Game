@@ -1,11 +1,13 @@
 all: clean desktop dist
 
 desktop: lovefile win64 dist
-gitbuilds: clean lovefile win64 gitdist
+gitbuilds: clean lovefile win64 win64_launcher gitdist
 console: lovefile switch
 
 GameName = Rit
 GameVersion = $(shell cat src/Assets/Data/Version.txt)
+
+# get git_sha argument that is given with make <target> git_sha=<sha>
 
 clean:
 	rm -rf build
@@ -31,6 +33,7 @@ win64: lovefile
 
 	cp requirements/steam_appid.txt build/$(GameName)-win64
 	cp requirements/alsoft.ini build/$(GameName)-win64
+
 
 	cat build/$(GameName)-win64/love.exe build/$(GameName)-lovefile/$(GameName).love > build/$(GameName)-win64/$(GameName).exe
 	rm build/$(GameName)-win64/love.exe
@@ -86,8 +89,34 @@ dist:
 	cd build/$(GameName)-win64 && zip -9 -r ../../build/dist/$(GameName)-win64.zip *
 	cp build/$(GameName)-lovefile/$(GameName).love build/dist/$(GameName).love
 
+win64_launcher:
+	mkdir build/
+	# make .love first
+	mkdir build/$(GameName)-lovefile-launcher
+	# zip all files in git-launcher-src/ into a love file
+	cd git-launcher-src && zip -9 -r ../build/$(GameName)-lovefile-launcher/$(GameName)-launcher.love *
+
+	mkdir build/$(GameName)-win64-launcher
+
+	wget https://github.com/love2d/love/releases/download/11.5/love-11.5-win64.zip
+	mv -f love-11.5-win64.zip requirements/win64/
+	unzip requirements/win64/love-11.5-win64.zip -d requirements/win64
+	mv -f requirements/win64/love-11.5-win64 requirements/win64/love
+	
+	rm requirements/win64/love-11.5-win64.zip
+
+	cp -r requirements/win64/love/* build/$(GameName)-win64-launcher
+	rm -rf requirements/win64/love
+
+	if [ -n "$(git_sha)" ]; then echo "$(git_sha)" > build/$(GameName)-win64-launcher/git_sha.txt; fi
+
+	cat build/$(GameName)-win64-launcher/love.exe build/$(GameName)-lovefile-launcher/$(GameName)-launcher.love > build/$(GameName)-win64-launcher/$(GameName)-launcher.exe
+	rm build/$(GameName)-win64-launcher/love.exe
+	rm build/$(GameName)-win64-launcher/lovec.exe
+
 gitdist:
 	rm -rf build/dist
 	mkdir build/dist
 	cd build/$(GameName)-win64 && zip -9 -r ../../build/dist/$(GameName)-win64.zip *
+	cd build/$(GameName)-win64-launcher && zip -9 -r ../../build/dist/$(GameName)-win64-launcher.zip *
 	cp build/$(GameName)-lovefile/$(GameName).love build/dist/$(GameName).love
