@@ -25,7 +25,7 @@ jobs:
         - uses: andelf/nightly-release@main
           with:
             tag_name: nightly_release
-            name: "Rit Nightly Release $$ (commit: $GITHUB_SHA)"
+            name: "Rit Nightly Release $$ (commit: ${{ github.sha }})"
             prerelease: true
             body: "This is a nightly release. May or may not work."
             files: build/dist/*
