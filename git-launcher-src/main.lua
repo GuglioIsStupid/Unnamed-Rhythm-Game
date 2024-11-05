@@ -134,3 +134,5 @@ love.filesystem.write("commit.txt", commit)
 
 print("Launching game...")
 os.execute(love.filesystem.getSaveDirectory() .. "/game_install/Rit.exe")
+
+return love.event.quit()
