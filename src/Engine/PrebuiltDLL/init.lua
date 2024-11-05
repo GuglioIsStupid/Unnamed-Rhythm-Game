@@ -13,7 +13,9 @@ if os == "Windows" then
         -- copy all files in ./Win64 to DLL/
         local files = love.filesystem.getDirectoryItems(path .. "Win64")
         for _, file in ipairs(files) do
-            love.filesystem.write("DLL/" .. file, love.filesystem.read(path .. "Win64/" .. file))
+            if not love.filesystem.getInfo("DLL/" .. file) then
+                love.filesystem.write("DLL/" .. file, love.filesystem.read(path .. "Win64/" .. file))
+            end
         end
     else
         print("UNSUPPORTED ARCHITECTURE! " .. arch)
