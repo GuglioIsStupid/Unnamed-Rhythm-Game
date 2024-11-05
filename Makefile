@@ -90,7 +90,6 @@ dist:
 	cp build/$(GameName)-lovefile/$(GameName).love build/dist/$(GameName).love
 
 win64_launcher:
-	mkdir build/
 	# make .love first
 	mkdir build/$(GameName)-lovefile-launcher
 	# zip all files in git-launcher-src/ into a love file
