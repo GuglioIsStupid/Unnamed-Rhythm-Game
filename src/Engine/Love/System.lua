@@ -4,6 +4,7 @@ local platfroms = {
 }
 
 local currentOS = love.system.getOS()
+local arch = jit.arch
 local isDesktop = false
 local isMobile = false
 local isUnknown = true
@@ -38,4 +39,15 @@ end
 
 function love.system.isUnknown()
     return isUnknown
+end
+
+function love.system.getOS(jitOS)
+    if jitOS then
+        return jitOS
+    end
+    return currentOS
+end
+
+function love.system.getArch()
+    return arch
 end

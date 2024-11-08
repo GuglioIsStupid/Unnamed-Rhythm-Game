@@ -1,21 +1,9 @@
 ---@diagnostic disable: redundant-parameter
 local threadEvent = love.thread.newThread("Engine/Threads/EventThread.lua")
-local channel = {
-    event = love.thread.getChannel("thread.event"),
-    active = love.thread.getChannel("thread.event.active"),
-    tick = love.thread.getChannel("thread.event.tick")
-}
 
-local function event(name, a, ...)
-    if name == "quit" and not love.quit() then
-        channel.event:clear()
-        channel.active:clear()
-        channel.active:push(0)
-        return a or 0, ...
-    end
-
-    return love.handlers[name](a, ...)
-end
+local channel_event = love.thread.getChannel("thread.event")
+local channel_active = love.thread.getChannel("thread.event.active")
+local channel_tick = love.thread.getChannel("thread.event.tick")
 
 local _, _, flags = love.window.getMode()
 love._drawrate = flags.refreshrate
@@ -27,42 +15,56 @@ function love.run()
     local g_origin, g_clear, g_present = love.graphics.origin, love.graphics.clear, love.graphics.present
     local g_active, g_getBGColour = love.graphics.isActive, love.graphics.getBackgroundColor
     local e_pump, e_poll, t, n = love.event.pump, love.event.poll, {}, 0
-    local t_step, t_sleep, t_getTime = love.timer.step, love.timer.sleep, love.timer.getTime
-    local t_getDelta = love.timer.getDelta
+    local t_step = love.timer.step
+    local a, b
+    local dt = 0
+    local love = love
+    local love_load, love_update, love_draw = love.load, love.update, love.draw
+    local love_quit, a_parseGameArguments = love.quit, love.arg.parseGameArguments
+    local collectgarbage = collectgarbage
+    local love_handlers = love.handlers
 
-    ---@diagnostic disable-next-line: redundant-parameter
-	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
+	love_load(a_parseGameArguments(arg), arg)
 
-	-- We don't want the first frame's dt to include time taken by love.load.
-	if love.timer then t_step() end
-
-	local dt = 0
-    local lastFrame = 0
-
+	t_step()
     t_step()
     collectgarbage()
 
+    ---@diagnostic disable-next-line: redefined-local
+    local function event(name, a, ...)
+        if name == "quit" and not love_quit() then
+            channel_event:clear()
+            channel_active:clear()
+            channel_active:push(0)
+            return a or 0, ...
+        end
+
+        return love_handlers[name](a, ...)
+    end
+
 	return function()
 		if threadEvent:isRunning() then
-            channel.active:clear()
-            channel.active:push(1)
-            a = channel.event:pop()
+            channel_active:clear()
+            channel_active:push(1)
+            a = channel_event:pop()
+
             while a do
-                b = channel.event:demand()
+                b = channel_event:demand()
                 for i =  1, b do
-                    t[i] = channel.event:demand()
+                    t[i] = channel_event:demand()
                 end
                 n, a, b = b, event(a, unpack(t, 1, b))
                 if a then
                     e_pump()
                     return a, b
                 end
-                a = channel.event:pop()
+                a = channel_event:pop()
             end
         end
 
         e_pump()
 
+        ---@diagnostic disable-next-line: redefined-local
         for name, a, b, c, d, e, f in e_poll() do
            a, b = event(name, a, b, c, d, e, f)
            if a then return a, b end
@@ -70,21 +72,20 @@ function love.run()
 
         dt = t_step()
 
-        love.update(dt)
+        love_update(dt)
 
         drawCur = drawCur + dt
-        if g_active()--[[  and drawCur >= 1 / love._drawrate ]] then
+        if g_active() then
             drawFPS = 1 / drawCur
             drawCur = 0
             g_origin()
             g_clear(g_getBGColour())
-            love.draw()
+            love_draw()
             g_present()
         end
 
         collectgarbage("step")
 
-        updateFPS = 1 / dt
         --t_sleep(0.001)
 	end
 end

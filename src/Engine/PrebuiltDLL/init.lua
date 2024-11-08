@@ -21,9 +21,29 @@ if os == "Windows" then
         print("UNSUPPORTED ARCHITECTURE! " .. arch)
     end
 elseif os == "OS X" then
-    print("MAC OS X NOT CURRENTLY SUPPORTED!")
+    if arch == "x64" then
+        -- copy all files in ./Mac64 to DLL/
+        local files = love.filesystem.getDirectoryItems(path .. "Mac64")
+        for _, file in ipairs(files) do
+            if not love.filesystem.getInfo("DLL/" .. file) then
+                love.filesystem.write("DLL/" .. file, love.filesystem.read(path .. "Mac64/" .. file))
+            end
+        end
+    else
+        print("UNSUPPORTED ARCHITECTURE! " .. arch)
+    end
 elseif os == "Linux" then
-    print("LINUX NOT CURRENTLY SUPPORTED!")
+    if arch == "x64" then
+        -- copy all files in ./Linux64 to DLL/
+        local files = love.filesystem.getDirectoryItems(path .. "Linux64")
+        for _, file in ipairs(files) do
+            if not love.filesystem.getInfo("DLL/" .. file) then
+                love.filesystem.write("DLL/" .. file, love.filesystem.read(path .. "Linux64/" .. file))
+            end
+        end
+    else
+        print("UNSUPPORTED ARCHITECTURE! " .. arch)
+    end
 else
     print("UNSUPPORTED OS! " .. os)
 end
