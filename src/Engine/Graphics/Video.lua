@@ -3,15 +3,15 @@ local Video = Sprite:extend("Video")
 function Video:new(video, x, y)
     Sprite.new(self, nil, x, y)
     if not DLL_Video then
-        print("Video not supported on this platform")
+        debug.warn("Video not supported on this platform")
 
         return self
     end
 
-    if not video then return self, print("Video path not provided") end
+    if not video then return self, debug.warn("Video path not provided") end
     video = love.filesystem.newFileData(video)
     local vid = DLL_Video.open(video:getPointer(), video:getSize())
-    if not vid then return self, print("Video not loaded") end
+    if not vid then return self, debug.warn("Video not loaded") end
 
     self.video = vid
     self.filedata = video

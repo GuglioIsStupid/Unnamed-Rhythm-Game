@@ -12,7 +12,7 @@ tryExcept(
         ffi = require("ffi") ---@type ffilib|nil
     end,
     function(exception)
-        print(exception)
+        debug.warn(exception)
         ffi = nil
     end
 )

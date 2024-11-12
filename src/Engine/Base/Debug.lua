@@ -1,3 +1,7 @@
+local LOG = ""
+
+love.filesystem.createDirectory("Logs")
+
 function debug.error(...)
     local message = {...}
     local errorMessage = ""
@@ -7,6 +11,8 @@ function debug.error(...)
             errorMessage = errorMessage .. key .. ": " .. value .. "\n"
         end
     end
+    LOG = LOG .. errorMessage
+    debug.save()
     error(errorMessage)
 end
 
@@ -19,6 +25,7 @@ function debug.warn(...)
             errorMessage = errorMessage .. key .. ": " .. value .. "\n"
         end
     end
+    LOG = LOG .. errorMessage
     print(errorMessage)
 end
 
@@ -31,6 +38,7 @@ function debug.log(...)
             errorMessage = errorMessage .. key .. ": " .. value .. "\n"
         end
     end
+    LOG = LOG .. errorMessage
     print(errorMessage)
 end
 
@@ -43,5 +51,14 @@ function debug.info(...)
             errorMessage = errorMessage .. key .. ": " .. value .. "\n"
         end
     end
+    LOG = LOG .. errorMessage
     print(errorMessage)
+end
+
+function debug.save()
+    -- format os.time()
+    local time = os.date("*t")
+    local formattedTime = time.year .. "-" .. time.month .. "-" .. time.day .. "-" .. time.hour .. "-" .. time.min
+    love.filesystem.write("Logs/log-" .. formattedTime .. ".txt", LOG)
+    print("Log saved to log-" .. formattedTime .. ".txt")
 end

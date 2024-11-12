@@ -51,7 +51,7 @@ function HoldObject:update(dt, endY)
 end
 
 function HoldObject:hit(time)
-    print("TODO: Finish HoldObject:hit()")
+    debug.log("TODO: Finish HoldObject:hit()")
 end
 
 function HoldObject:resize(w, h)

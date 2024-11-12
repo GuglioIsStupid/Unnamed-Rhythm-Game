@@ -18,7 +18,7 @@ if os == "Windows" then
             end
         end
     else
-        print("UNSUPPORTED ARCHITECTURE! " .. arch)
+        debug.warn("UNSUPPORTED ARCHITECTURE! " .. arch)
     end
 elseif os == "OS X" then
     if arch == "x64" then
@@ -30,7 +30,7 @@ elseif os == "OS X" then
             end
         end
     else
-        print("UNSUPPORTED ARCHITECTURE! " .. arch)
+        debug.warn("UNSUPPORTED ARCHITECTURE! " .. arch)
     end
 elseif os == "Linux" then
     if arch == "x64" then
@@ -42,10 +42,10 @@ elseif os == "Linux" then
             end
         end
     else
-        print("UNSUPPORTED ARCHITECTURE! " .. arch)
+        debug.warn("UNSUPPORTED ARCHITECTURE! " .. arch)
     end
 else
-    print("UNSUPPORTED OS! " .. os)
+    debug.warn("UNSUPPORTED OS! " .. os)
 end
 
 local savepath = love.filesystem.getSaveDirectory()

@@ -4,9 +4,7 @@ local state = States.Screens.Game
 
 function Quaver:parse(path, folderPath)
     local data = love.filesystem.read(path)
-    print("PARSING QUAVER")
     data = Yaml.parse(data)
-    print("DONE PARSING YML")
     local noteCount = 0
 
     for _, note in ipairs(data["HitObjects"]) do
@@ -17,16 +15,12 @@ function Quaver:parse(path, folderPath)
         )
     end
 
-    print("DONE NOTES")
-
     for _, sv in ipairs(data["SliderVelocities"]) do
         table.insert(
             state.instance.data.scrollVelocities,
             {StartTime = sv.StartTime, Multiplier = sv.Multiplier or 0}
         )
     end
-
-    print("DONE SV")
 
     state.instance.data.initialSV = data["InitialScrollVelocity"] or 1
 

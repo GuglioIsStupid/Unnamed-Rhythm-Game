@@ -26,7 +26,7 @@ end
 if isDesktop or isMobile then
     isUnknown = false
 else
-    print("UNKNOWN PLATFORM " .. jit.os)
+    debug.warn("UNKNOWN PLATFORM " .. jit.os)
 end
 
 function love.system.isDesktop()

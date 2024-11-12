@@ -14,7 +14,6 @@ function MapEditor:renderImGUI()
             
             if ImGUI.InputText("Name", ffi.cast("char*", self._mapName), 256, ImGUI.ImGuiInputTextFlags_EnterReturnsTrue) then
                 self._mapName = ffi.string(ImGUI.GetInputTextResult())
-                print("Map Name: " .. self._mapName)
             end
 
             ImGUI.EndMenuBar()

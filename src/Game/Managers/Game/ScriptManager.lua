@@ -3,7 +3,7 @@ local Script = {}
 
 function Script:loadScript(path)
     self.script = nil
-    print("Loading script: " .. path)
+    debug.log("Loading script: " .. path)
     if not love.filesystem.getInfo(path) then
         return
     end
@@ -25,7 +25,7 @@ function Script:call(name, ...)
         --[[ return self.env[name](...) ]]
         local ok, err = pcall(self.env[name], ...)
         if not ok then
-            print("Error calling function " .. name, err)
+            debug.warn("Error calling function " .. name, err)
         end
     end
 end
