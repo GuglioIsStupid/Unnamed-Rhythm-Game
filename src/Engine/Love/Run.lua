@@ -5,17 +5,17 @@ local channel_event = love.thread.getChannel("thread.event")
 local channel_active = love.thread.getChannel("thread.event.active")
 local channel_tick = love.thread.getChannel("thread.event.tick")
 
-local _, _, flags = love.window.getMode()
-love._drawrate = flags.refreshrate
-love._updaterate = 500
-local drawFPS, updateFPS = 0, 0
-local updateCur, drawCur = 0, 0
+local drawCur, drawFPS = 0, 0
+
+love._framerate = 1000
 
 function love.run()
     local g_origin, g_clear, g_present = love.graphics.origin, love.graphics.clear, love.graphics.present
     local g_active, g_getBGColour = love.graphics.isActive, love.graphics.getBackgroundColor
     local e_pump, e_poll, t, n = love.event.pump, love.event.poll, {}, 0
     local t_step = love.timer.step
+    local t_getTime = love.timer.getTime
+    local t_sleep = love.timer.sleep
     local a, b
     local dt = 0
     local love = love
@@ -41,6 +41,8 @@ function love.run()
 
         return love_handlers[name](a, ...)
     end
+
+    local lastFrame = 0
 
 	return function()
 		if threadEvent:isRunning() then
@@ -71,10 +73,15 @@ function love.run()
         end
 
         dt = t_step()
+        drawCur = drawCur + dt
 
         love_update(dt)
 
-        drawCur = drawCur + dt
+        while t_getTime() - lastFrame < 1 / love._framerate do
+            t_sleep(0.0005)
+        end
+
+        lastFrame = t_getTime()
         if g_active() then
             drawFPS = 1 / drawCur
             drawCur = 0
@@ -85,9 +92,7 @@ function love.run()
         end
 
         collectgarbage("step")
-
-        --t_sleep(0.001)
-	end
+    end
 end
 
 local o_timer_getFPS = love.timer.getFPS

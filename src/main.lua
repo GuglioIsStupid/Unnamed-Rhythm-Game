@@ -197,10 +197,10 @@ function love.draw()
         love.graphics.pop()
     end
 
-    Game:renderImGUI()
+    --Game:renderImGUI()
 
-    ImGUI.Render()
-    ImGUI.love.RenderDrawLists()
+    --ImGUI.Render()
+    --ImGUI.love.RenderDrawLists()
 end
 
 
