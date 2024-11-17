@@ -7,7 +7,6 @@ local noteCount = 0
 local state = States.Screens.Game
 
 function Rit:parse(path, folderPath)
-    print("PARSING RIT")
     currentSection = ""
     curData = {}
     noteCount = 0

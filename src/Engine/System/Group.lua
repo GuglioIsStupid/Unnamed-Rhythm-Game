@@ -18,7 +18,7 @@ function Group:add(object, reorder, pos)
 
     reorder = reorder == nil and true or false
     if self.size > 0 and #self.objects >= self.size then
-        print("Group is full (" .. #self.objects .. "/" .. self.size .. ")")
+        debug.warn("Group is full (" .. #self.objects .. "/" .. self.size .. ")")
         return
     end
 

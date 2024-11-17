@@ -7,7 +7,7 @@ end
 
 ---@param path string
 function BaseCache:get(path)
-    print("BaseCache:get(path) is not implemented.")
+    debug.warn("BaseCache:get(path) is not implemented.")
 end
 
 function BaseCache:clear()

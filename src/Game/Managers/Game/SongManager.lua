@@ -94,7 +94,7 @@ function SongManager:loadCache(filename, ogPath, fileExt)
         return songData
     end
 
-    print("Failed to load cache for " .. filename)
+    debug.warn("Failed to load cache for " .. filename)
 end
 
 return SongManager

@@ -34,7 +34,7 @@ function TitleMenu:new()
     end)
     self.playButton:setScale(1.35, 1.35)
     self.ohButton = TitleButton("Online\nHub", "Assets/Textures/Menu/Buttons/OhBtn.png", "Assets/Textures/Menu/Buttons/BigBtnBorder.png", 1550, 300, function()
-        print("Online Hub is not currently implemented")
+        debug.warn("Online Hub is not currently implemented")
     end)
     self.ohButton:setScale(1.35, 1.35)
 

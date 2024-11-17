@@ -7,7 +7,7 @@ local o_require = require
 function require(path)
     for _, module in ipairs(disabledModules) do
         if path:find(module) then
-            print("Not allowed to load module: " .. module)
+            debug.warn("Not allowed to load module: " .. module)
             return nil
         end
     end
@@ -58,18 +58,22 @@ function love.load(args)
 
     NetworkingClientThread:start(SERVER_URL, PORT)
 
-    os.execute = function() print("os.execute is disabled") end
-    os.exit = function() print("os.exit is disabled") end
-    os.remove = function() print("os.remove is disabled") end
-    os.rename = function() print("os.rename is disabled") end
-    os.setlocale = function() print("os.setlocale is disabled") end
+    os.execute = function() debug.warn("os.execute is disabled") end
+    os.exit = function() debug.warn("os.exit is disabled") end
+    os.remove = function() debug.warn("os.remove is disabled") end
+    os.rename = function() debug.warn("os.rename is disabled") end
+    os.setlocale = function() debug.warn("os.setlocale is disabled") end
 
-    ImGUI.love.Init("RGBA32")
+    if ImGUI then
+        ImGUI.love.Init("RGBA32")
+    end
 end
 
 function love.update(dt)
-    ImGUI.love.Update(dt)
-    ImGUI.NewFrame()
+    if ImGUI then
+        ImGUI.love.Update(dt)
+        ImGUI.NewFrame()
+    end
     
     Input:update()
     Cache:update()
@@ -89,7 +93,7 @@ function love.update(dt)
     local msg = NetworkingClient:getMessage()
     if msg then
         if msg.action == "gotServers" then
-            print(table.format(msg))
+            debug.log(table.format(msg))
         end
     end
 end
@@ -193,11 +197,12 @@ function love.draw()
         love.graphics.pop()
     end
 
-    Game:renderImGUI()
+    --Game:renderImGUI()
 
-    ImGUI.Render()
-    ImGUI.love.RenderDrawLists()
+    --ImGUI.Render()
+    --ImGUI.love.RenderDrawLists()
 end
+
 
 function love.quit()
     if GENERATE_GLOBALS_LIST then
@@ -211,10 +216,12 @@ function love.quit()
         end
         table.sort(globalList)
 
-        print("Writing global list to file")
+        debug.log("Writing global list to file")
 
         love.filesystem.write("globalList.txt", table.concat(globalList, "\n"))
     end
-
+    
     Game:quit()
+
+    debug.save()
 end

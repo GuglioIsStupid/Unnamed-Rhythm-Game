@@ -21,7 +21,7 @@ function EndObject:update(dt)
 end
 
 function EndObject:hit(time)
-    print("TODO: Finish EndObject:hit()")
+    debug.log("TODO: Finish EndObject:hit()")
 end
 
 return EndObject
