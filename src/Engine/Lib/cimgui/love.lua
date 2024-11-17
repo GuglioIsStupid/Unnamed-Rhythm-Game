@@ -227,7 +227,7 @@ function L.Update(dt)
     io.DeltaTime = dt
 
     if io.WantSetMousePos then
-        love.mouse.setPosition(io.MousePos.x, io.MousePos.y)
+        --love.mouse.setPosition(io.MousePos.x, io.MousePos.y)
     end
 end
 
