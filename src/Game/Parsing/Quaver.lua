@@ -27,7 +27,7 @@ function Quaver:parse(path, folderPath)
     end
 
     print("DONE SV")
-
+    
     state.instance.data.initialSV = data["InitialScrollVelocity"] or 1
 
     state.instance.data.song = love.sound.newSoundData(folderPath .. "/" .. data["AudioFile"])
