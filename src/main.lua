@@ -63,18 +63,9 @@ function love.load(args)
     os.remove = function() debug.warn("os.remove is disabled") end
     os.rename = function() debug.warn("os.rename is disabled") end
     os.setlocale = function() debug.warn("os.setlocale is disabled") end
-
-    if ImGUI then
-        ImGUI.love.Init("RGBA32")
-    end
 end
 
 function love.update(dt)
-    if ImGUI then
-        ImGUI.love.Update(dt)
-        ImGUI.NewFrame()
-    end
-    
     Input:update()
     Cache:update()
     Game:update(dt)
@@ -105,28 +96,16 @@ function love.resize(w, h)
 end
 
 function love.keypressed(key, scancode, isrepeat)
-    ImGUI.love.KeyPressed(key)
-    if ImGUI.love.GetWantCaptureKeyboard() then
-        return
-    end
     Input:keypressed(key)
     Game:keypressed(key, scancode, isrepeat)
 end
 
 function love.keyreleased(key, scancode)
-    ImGUI.love.KeyReleased(key)
-    if ImGUI.love.GetWantCaptureKeyboard() then
-        return
-    end
     Input:keyreleased(key)
     Game:keyreleased(key, scancode)
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
-    ImGUI.love.MousePressed(button)
-    if ImGUI.love.GetWantCaptureMouse() then
-        return
-    end
     local ok = true
     for _, substate in ipairs(Game._substates) do
         if substate:mousepressed(x, y, button) then
@@ -145,10 +124,6 @@ function love.mousepressed(x, y, button, istouch, presses)
 end
 
 function love.mousereleased(x, y, button, istouch, presses)
-    ImGUI.love.MouseReleased(button)
-    if ImGUI.love.GetWantCaptureMouse() then
-        return
-    end
     Game:mousereleased(x, y, button, istouch, presses)
     Input:mousereleased(button)
 
@@ -158,18 +133,10 @@ function love.mousereleased(x, y, button, istouch, presses)
 end
 
 function love.wheelmoved(x, y)
-    ImGUI.love.WheelMoved(x, y)
-    if ImGUI.love.GetWantCaptureMouse() then
-        return
-    end
     Game:wheelmoved(x, y)
 end
 
 function love.mousemoved(x, y, dx, dy, istouch)
-    ImGUI.love.MouseMoved(x, y)
-    if ImGUI.love.GetWantCaptureMouse() then
-        return
-    end
     Game:mousemoved(x, y, dx, dy, istouch)
 
     if VirtualPad and VirtualPad._CURRENT and not istouch then
@@ -178,10 +145,6 @@ function love.mousemoved(x, y, dx, dy, istouch)
 end
 
 function love.textinput(t)
-    ImGUI.love.TextInput(t)
-    if ImGUI.love.GetWantCaptureKeyboard() then
-        return
-    end
     Game:textinput(t)
 end
 

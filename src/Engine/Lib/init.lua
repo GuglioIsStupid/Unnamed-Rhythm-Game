@@ -18,5 +18,3 @@ if Steam then
 end
 
 MD5 = require(path .. "md5")
-
-ImGUI = require(path .. "cimgui")
