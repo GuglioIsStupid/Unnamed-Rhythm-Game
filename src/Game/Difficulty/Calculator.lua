@@ -26,8 +26,9 @@ function DifficultyCalculator:calculate(notes, laneCount)
 
     for i, note in ipairs(notes) do
         if not note.StartTime then
-            note.StartTime = 0
+            note.StartTime = note.time or 0
         end
+        note.Lane = note.Lane or note.lane or 1
         note.StartTime = (note.StartTime - firstTime) * 2
     end
 

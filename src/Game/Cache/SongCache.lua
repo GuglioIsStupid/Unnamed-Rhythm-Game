@@ -76,6 +76,12 @@ function SongCache:loadCache(filename, ogPath, fileExt)
             songData.metaType = 3
             songData.game_mode = "Mania"
             return songData
+        elseif fileExt == ".fsc" then
+            local data = love.filesystem.read(ogPath)
+            local songData = Parsers.Fluxis:cache(data, filename, ogPath)
+            songData.metaType = 4
+            songData.game_mode = "Mania"
+            return songData
         end
     end
 end
@@ -102,6 +108,12 @@ function SongCache:loadSongsPath(path)
                     local filename = song:gsub(".rit$", "")
                     local fullPath = path .. "/" .. file .. "/" .. song
                     local fileExt = ".ritc"
+                    
+                    self:loadCache(filename, fullPath, fileExt)
+                elseif song:endsWith(".fsc") then
+                    local filename = song:gsub(".fsc$", "")
+                    local fullPath = path .. "/" .. file .. "/" .. song
+                    local fileExt = ".fsc"
                     
                     self:loadCache(filename, fullPath, fileExt)
                 end

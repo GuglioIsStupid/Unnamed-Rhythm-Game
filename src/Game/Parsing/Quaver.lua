@@ -63,7 +63,7 @@ function Quaver:cache(data, filename, path)
     local difficulty, nps = 0, 0
 
     for _, note in ipairs(data["HitObjects"]) do
-        hitobj_count = hitobj_count + 1 -- jas StartTime and EndTime (can be nil)
+        hitobj_count = hitobj_count + 1 -- has StartTime and EndTime (can be nil)
         table.insert(notes, note)
         if note["EndTime"] then
             length = math.max(length, note["EndTime"] > (note["StartTime"] or 0) and note["EndTime"] or note["StartTime"] or 0)
