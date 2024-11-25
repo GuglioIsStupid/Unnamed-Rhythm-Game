@@ -63,5 +63,8 @@ tryExcept(function()
 end)
 
 tryExcept(function()
+    if os ~= "Windows" then
+        return
+    end
     DLL_Https = require("https")
 end)
