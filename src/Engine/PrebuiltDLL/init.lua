@@ -49,7 +49,14 @@ else
 end
 
 local savepath = love.filesystem.getSaveDirectory()
-package.cpath = package.cpath .. ";" .. savepath .. "/DLL/?.dll"
+if os == "Windows" then
+    package.cpath = package.cpath .. ";" .. savepath .. "/DLL/?.dll"
+elseif os == "OS X" then
+    package.cpath = package.cpath .. ";" .. savepath .. "/DLL/?.dylib"
+elseif os == "Linux" then
+    package.cpath = package.cpath .. ";" .. savepath .. "/DLL/?.so"
+end
+--package.cpath = package.cpath .. ";" .. savepath .. "/DLL/?.dll"
 
 tryExcept(function()
     DLL_Video = require("video")
