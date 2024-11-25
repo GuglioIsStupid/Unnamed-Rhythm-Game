@@ -89,8 +89,6 @@ function RitM:cache(data, filename, path)
         bg_path = curData.BackgroundFile
     }
 
-    SongCache:createCache(songData, filename, ".ritm")
-
     return songData
 end
 

@@ -103,8 +103,6 @@ function Quaver:cache(data, filename, path)
         nps = nps
     }
 
-    SongCache:createCache(songData, filename, ".qua")
-
     return songData
 end
 

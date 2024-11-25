@@ -4,6 +4,8 @@ require(path .. "External")
 require(path .. "States")
 require(path .. "Substates")
 require(path .. "Managers")
+Database = require(path .. "Database")
+Database:getDBs()
 require(path .. "Objects")
 require(path .. "Cache")
 require(path .. "Threads")
@@ -11,10 +13,11 @@ Parsers = require(path .. "Parsing")
 
 require(path .. "Difficulty")
 
-
 local function setupFolders()
     love.filesystem.createDirectory("CacheData")
-    love.filesystem.createDirectory("CacheData/Beatmaps")
+    --[[ love.filesystem.createDirectory("CacheData/Beatmaps") ]]
+    -- create a .db file for Beatmaps
+    
     love.filesystem.createDirectory("Data")
     love.filesystem.createDirectory("Beatmaps")
 

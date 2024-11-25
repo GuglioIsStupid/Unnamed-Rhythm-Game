@@ -26,63 +26,84 @@ local SongCacheFormat = {
 local SongCache = Class:extend("SongCache")
 SongCache.songs = {}
 
-function SongCache:createCache(songData, filename, fileExt)
-    local strOut = ""
-    for key, _ in pairs(SongCacheFormat) do
-        strOut = strOut .. key .. ":" .. (songData[key] or 0) .. "\n"
+function SongCache:createCache(songData, filename, fileExt, ogPath)
+    local db = Database.BeatmapDB
+    
+    local data = SongCacheFormat
+    for k, v in pairs(songData) do
+        data[k] = v
     end
 
-    love.filesystem.write("CacheData/Beatmaps/" .. filename .. ".rsc", strOut)
+    data.filename = filename
+    data.ogpath = ogPath
+    data.fileext = fileExt
 
-    return SongCacheFormat
+    db:exec(
+        'INSERT INTO Beatmaps VALUES ("' .. 
+        data.filename .. '", "' .. 
+        data.ogpath .. '", "' .. 
+        data.fileext .. '", "' .. 
+        data.title:safe() .. '", "' .. 
+        data.artist:safe() .. '", "' .. 
+        data.source:safe() .. '", "' .. 
+        data.tags:safe() .. '", "' .. 
+        data.creator:safe() .. '", "' .. 
+        data.diff_name:safe() .. '", "' .. 
+        data.description:safe() .. '", "' .. 
+        data.path .. '", "' .. 
+        data.audio_path .. '", "' .. 
+        data.bg_path .. '", ' .. 
+        data.preview_time .. ', ' .. 
+        data.mapset_id .. ', ' .. 
+        data.map_id .. ', ' .. 
+        data.mode .. ', "' .. 
+        data.game_mode .. '", "' .. 
+        data.map_type .. '", ' .. 
+        data.hitobj_count .. ', ' .. 
+        data.ln_count .. ', ' .. 
+        data.length .. ', ' .. 
+        data.metaType .. ', ' .. 
+        data.difficulty .. ', ' .. 
+        data.nps .. 
+        ')'
+    )
+
+    return data
 end
- 
-function SongCache:loadCache(filename, ogPath, fileExt)
-    if love.filesystem.getInfo("CacheData/Beatmaps/" .. filename .. ".rsc") then
-        local data = love.filesystem.read("CacheData/Beatmaps/" .. filename .. ".rsc")
-        local songData = {}
-        for line in data:gmatch("[^\n]+") do
-            local key, value = line:match("([^:]+):(.+)")
-            if not key or not value then
-                goto continue
-            end
-            songData[key] = value
 
-            ::continue::
-        end
-        songData["difficulty"] = tonumber(string.format("%.2f", tonumber(songData["difficulty"] or 0) or 0)) or 0
-        if tonumber(songData["metaType"]) ~= 4 then
-            -- delete the cache file and reload the song
-            love.filesystem.remove("CacheData/Beatmaps/" .. filename .. ".rsc")
-            return self:loadCache(filename, ogPath, fileExt)
-        end
-        return songData
-    else
-        if fileExt == ".qua" then
-            local data = love.filesystem.read(ogPath)
-            local songData = Parsers.Quaver:cache(data, filename, ogPath)
-            songData.metaType = 4
-            songData.game_mode = "Mania"
-            return songData
-        elseif fileExt == ".osu" then
-            local data = love.filesystem.read(ogPath)
-            local songData = Parsers.Osu:cache(data, filename, ogPath)
-            songData.metaType = 4
-            songData.game_mode = "Mania"
-            return songData
-        elseif fileExt == ".ritc" then
-            local data = love.filesystem.read(ogPath)
-            local songData = Parsers.Rit:cache(data, filename, ogPath)
-            songData.metaType = 3
-            songData.game_mode = "Mania"
-            return songData
-        elseif fileExt == ".fsc" then
-            local data = love.filesystem.read(ogPath)
-            local songData = Parsers.Fluxis:cache(data, filename, ogPath)
-            songData.metaType = 4
-            songData.game_mode = "Mania"
-            return songData
-        end
+
+function SongCache:loadCache(filename, ogPath, fileExt)
+    local db = Database.BeatmapDB
+    local data = db:exec([[SELECT * FROM Beatmaps WHERE filename=="]] .. filename .. [[" AND ogpath=="]] .. ogPath .. [[" AND fileext=="]] .. fileExt .. [["]])
+
+    if data then
+        return data
+    end
+
+    if fileExt == ".qua" then
+        local data = love.filesystem.read(ogPath)
+        local songData = Parsers.Quaver:cache(data, filename, ogPath)
+        songData.metaType = 4
+        songData.game_mode = "Mania"
+        return self:createCache(songData, filename, fileExt, ogPath)
+    elseif fileExt == ".osu" then
+        local data = love.filesystem.read(ogPath)
+        local songData = Parsers.Osu:cache(data, filename, ogPath)
+        songData.metaType = 4
+        songData.game_mode = "Mania"
+        return self:createCache(songData, filename, fileExt, ogPath)
+    elseif fileExt == ".ritc" then
+        local data = love.filesystem.read(ogPath)
+        local songData = Parsers.Rit:cache(data, filename, ogPath)
+        songData.metaType = 3
+        songData.game_mode = "Mania"
+        return self:createCache(songData, filename, fileExt, ogPath)
+    elseif fileExt == ".fsc" then
+        local data = love.filesystem.read(ogPath)
+        local songData = Parsers.Fluxis:cache(data, filename, ogPath)
+        songData.metaType = 4
+        songData.game_mode = "Mania"
+        return self:createCache(songData, filename, fileExt, ogPath)
     end
 end
 

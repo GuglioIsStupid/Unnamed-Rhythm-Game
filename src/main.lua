@@ -183,6 +183,8 @@ function love.quit()
 
         love.filesystem.write("globalList.txt", table.concat(globalList, "\n"))
     end
+
+    Database:closeDBs()
     
     Game:quit()
 

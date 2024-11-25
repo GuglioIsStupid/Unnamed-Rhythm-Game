@@ -98,9 +98,7 @@ function Rit:cache(data, filename, path)
         difficulty = difficulty,
         nps = nps
     }
-
-    SongCache:createCache(songData, filename, ".Rit")
-
+    
     return songData
 end
 

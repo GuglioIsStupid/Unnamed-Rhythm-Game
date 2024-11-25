@@ -151,8 +151,6 @@ function osu:cache(data, filename, path)
         nps = nps,
     }
 
-    SongCache:createCache(songData, filename, ".osu")
-
     return songData
 end
 

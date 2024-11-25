@@ -60,4 +60,22 @@ function string:splitAllChars()
     return t
 end
 
+local replacementChars = {
+    -- actually dont use html stuffs
+    ["\'"] = "&#39|",
+    ["\""] = "&quot|",
+    ["<"] = "&lt|",
+    [">"] = "&gt|",
+    ["&"] = "&amp|",
+    [";"] = "&semi|"
+}
+
+function string:safe()
+    for k, v in pairs(replacementChars) do
+        self = self:gsub(k, v)
+    end
+
+    return self
+end
+
 return string

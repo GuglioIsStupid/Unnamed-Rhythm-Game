@@ -107,8 +107,6 @@ function Fluxis:cache(data, filename, path)
         nps = nps
     }
 
-    SongCache:createCache(songData, filename, ".fluxis")
-
     return songData
 end
 

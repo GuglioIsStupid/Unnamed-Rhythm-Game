@@ -1,6 +1,6 @@
 local path = ... .. "."
 
-zfft = require(path .. "zorgfft.zfft")
+Zfft = require(path .. "zorgfft.zfft")
 love.audio.newAdvancedSource = require(path .. "asl.asl")
 tryExcept(function()
     Steam = require(path .. "sworks.main")
@@ -18,3 +18,4 @@ if Steam then
 end
 
 MD5 = require(path .. "md5")
+Sqlite3 = require(path .. "ljsqlite3")
