@@ -183,21 +183,7 @@ int sqlite3_create_function(
 --------------------------------------------------------------------------------
 local sql
 --[[ local sql = ffi.load("sqlite3") ]]
-tryExcept(function()
-    sql = ffi.load("sqlite3")
-end,
-function()
-    local path = "DLL/sqlite3"
-    local os = love.system.getOS()
-    if os == "Windows" then
-        path = path .. ".dll"
-    elseif os == "OS X" then
-        path = path .. ".dylib"
-    elseif os == "Linux" then
-        path = path .. ".so"
-    end
-    sql = ffi.load(path)
-end)
+sql = ffi.load("sqlite3")
 
 local transient = ffi.cast("sqlite3_destructor_type", -1)
 local int64_ct = ffi.typeof("int64_t")

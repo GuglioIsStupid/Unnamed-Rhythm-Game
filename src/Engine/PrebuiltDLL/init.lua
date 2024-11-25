@@ -13,8 +13,8 @@ if os == "Windows" then
         -- copy all files in ./Win64 to DLL/
         local files = love.filesystem.getDirectoryItems(path .. "Win64")
         for _, file in ipairs(files) do
-            if not love.filesystem.getInfo("DLL/" .. file) then
-                love.filesystem.write("DLL/" .. file, love.filesystem.read(path .. "Win64/" .. file))
+            if not love.filesystem.getInfo(file) then
+                love.filesystem.write(file, love.filesystem.read(path .. "Win64/" .. file))
             end
         end
     else
@@ -25,8 +25,8 @@ elseif os == "OS X" then
         -- copy all files in ./Mac64 to DLL/
         local files = love.filesystem.getDirectoryItems(path .. "Mac64")
         for _, file in ipairs(files) do
-            if not love.filesystem.getInfo("DLL/" .. file) then
-                love.filesystem.write("DLL/" .. file, love.filesystem.read(path .. "Mac64/" .. file))
+            if not love.filesystem.getInfo(file) then
+                love.filesystem.write(file, love.filesystem.read(path .. "Mac64/" .. file))
             end
         end
     else
@@ -37,8 +37,8 @@ elseif os == "Linux" then
         -- copy all files in ./Linux64 to DLL/
         local files = love.filesystem.getDirectoryItems(path .. "Linux64")
         for _, file in ipairs(files) do
-            if not love.filesystem.getInfo("DLL/" .. file) then
-                love.filesystem.write("DLL/" .. file, love.filesystem.read(path .. "Linux64/" .. file))
+            if not love.filesystem.getInfo(file) then
+                love.filesystem.write(file, love.filesystem.read(path .. "Linux64/" .. file))
             end
         end
     else
@@ -47,16 +47,6 @@ elseif os == "Linux" then
 else
     debug.warn("UNSUPPORTED OS! " .. os)
 end
-
-local savepath = love.filesystem.getSaveDirectory()
-if os == "Windows" then
-    package.cpath = package.cpath .. ";" .. savepath .. "/DLL/?.dll"
-elseif os == "OS X" then
-    package.cpath = package.cpath .. ";" .. savepath .. "/DLL/?.dylib"
-elseif os == "Linux" then
-    package.cpath = package.cpath .. ";" .. savepath .. "/DLL/?.so"
-end
---package.cpath = package.cpath .. ";" .. savepath .. "/DLL/?.dll"
 
 tryExcept(function()
     DLL_Video = require("video")
