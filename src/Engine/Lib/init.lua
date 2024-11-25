@@ -3,6 +3,9 @@ local path = ... .. "."
 Zfft = require(path .. "zorgfft.zfft")
 love.audio.newAdvancedSource = require(path .. "asl.asl")
 tryExcept(function()
+    if os ~= "Windows" then
+        return
+    end
     Steam = require(path .. "sworks.main")
 end)
 
