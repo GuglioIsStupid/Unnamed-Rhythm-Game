@@ -188,6 +188,7 @@ tryExcept(function()
 end,
 function()
     local path = "DLL/sqlite3"
+    local os = love.system.getOS()
     if os == "Windows" then
         path = path .. ".dll"
     elseif os == "OS X" then
