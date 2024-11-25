@@ -181,7 +181,14 @@ int sqlite3_create_function(
 ]]
 
 --------------------------------------------------------------------------------
-local sql = ffi.load("sqlite3")
+local sql
+--[[ local sql = ffi.load("sqlite3") ]]
+tryExcept(function()
+    sql = ffi.load("sqlite3")
+end,
+function()
+    sql = ffi.load("DLL/sqlite3")
+end)
 
 local transient = ffi.cast("sqlite3_destructor_type", -1)
 local int64_ct = ffi.typeof("int64_t")
