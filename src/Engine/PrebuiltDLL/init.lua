@@ -1,4 +1,4 @@
-local path = ... .. "."
+--[[ local path = ... .. "."
 -- replace all . with / 
 path = string.gsub(path, "%.", "/")
 local os = love.system.getOS()
@@ -46,15 +46,12 @@ elseif os == "Linux" then
     end
 else
     debug.warn("UNSUPPORTED OS! " .. os)
-end
+end ]]
 
 tryExcept(function()
     DLL_Video = require("video")
 end)
 
 tryExcept(function()
-    if os ~= "Windows" then
-        return
-    end
     DLL_Https = require("https")
 end)
