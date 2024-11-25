@@ -187,7 +187,15 @@ tryExcept(function()
     sql = ffi.load("sqlite3")
 end,
 function()
-    sql = ffi.load("DLL/sqlite3")
+    local path = "DLL/sqlite3"
+    if os == "Windows" then
+        path = path .. ".dll"
+    elseif os == "OS X" then
+        path = path .. ".dylib"
+    elseif os == "Linux" then
+        path = path .. ".so"
+    end
+    sql = ffi.load(path)
 end)
 
 local transient = ffi.cast("sqlite3_destructor_type", -1)
