@@ -14,6 +14,7 @@ ModifierManager.Modifiers = {
     {
         "Fade In", "Notes fade in as they approach the receptors", 0.1,
     },
+    -- if both fade in and fade out are enabled, then multiplier goes up .3
     {
         "Mirror", "Notes are mirrored (Left -> Right, Up -> Down)", 0,
     }
@@ -43,6 +44,10 @@ function ModifierManager:getScoreMultiplier()
 
     if States.Screens.Game.ScrollVelocity and table.contains(self.ActiveModifiers, "No SV") then
         mult = mult + self:getModifier("No SV")[3]
+    end
+
+    if table.contains(self.ActiveModifiers, "Fade Out") and table.contains(self.ActiveModifiers, "Fade In") then
+        mult = mult + 0.1
     end
 
     for _, mod in ipairs(self.ActiveModifiers) do

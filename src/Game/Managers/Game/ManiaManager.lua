@@ -1,8 +1,8 @@
----@class HitObjectManager
-local HitObjectManager = Group:extend("HitObjectManager")
+---@class ManiaManager
+local ManiaManager = Group:extend("ManiaManager")
 local GAME = States.Screens.Game
 
-function HitObjectManager:new(instance)
+function ManiaManager:new(instance)
     Group.new(self)
 
     self.receptorsGroup = TypedGroup(Receptor)
@@ -48,7 +48,7 @@ end
 
 local midX = 1920/2.45
 
-function HitObjectManager:createReceptors(count)
+function ManiaManager:createReceptors(count)
     self.data = {mode = 4}
     self.data.mode = count
     local dir = SettingsManager:getSetting("Game", "ScrollDirection")
@@ -70,7 +70,7 @@ function HitObjectManager:createReceptors(count)
     self:resortReceptors()
 end
 
-function HitObjectManager:resortReceptors()
+function ManiaManager:resortReceptors()
     -- sometimes positions get messed up
     local dir = SettingsManager:getSetting("Game", "ScrollDirection")
     for i = 1, self.data.mode do
@@ -87,11 +87,11 @@ function HitObjectManager:resortReceptors()
     end
 end
 
-function HitObjectManager:isOnScreen(time, lane)
+function ManiaManager:isOnScreen(time, lane)
     return self:getNotePosition(self:getPositionFromTime(time), lane, true) >= -500
 end
 
-function HitObjectManager:initSVMarks()
+function ManiaManager:initSVMarks()
     if #self.scrollVelocities < 1 then
         return
     end
@@ -110,7 +110,7 @@ function HitObjectManager:initSVMarks()
     end
 end
 
-function HitObjectManager:getPositionFromTime(time, index)
+function ManiaManager:getPositionFromTime(time, index)
     index = index or -1
 
     if index == -1 then
@@ -136,7 +136,7 @@ function HitObjectManager:getPositionFromTime(time, index)
     return pos
 end
 
-function HitObjectManager:getNotePosition(time, lane, moveWithScroll)
+function ManiaManager:getNotePosition(time, lane, moveWithScroll)
     local dir = SettingsManager:getSetting("Game", "ScrollDirection")
     if not moveWithScroll then
         if dir == "Split" then
@@ -176,7 +176,7 @@ function HitObjectManager:getNotePosition(time, lane, moveWithScroll)
     end
 end 
 
-function HitObjectManager:updateTime(dt)
+function ManiaManager:updateTime(dt)
     self.musicTime = self.musicTime + (self.previousFrameTime and (love.timer.getTime() - self.previousFrameTime) or 0) * 1000
     self.previousFrameTime = love.timer.getTime()
     if self.musicTime >= 0 then
@@ -192,12 +192,12 @@ function HitObjectManager:updateTime(dt)
     self.currentTime = self:getPositionFromTime(self.musicTime, self.svIndex)
 end
 
-function HitObjectManager:resize(w, h)
+function ManiaManager:resize(w, h)
     Group.resize(self, w, h)
     self:resortReceptors()
 end
 
-function HitObjectManager:update(dt)
+function ManiaManager:update(dt)
     self:updateTime(dt)
 
     while #self.hitObjects > 0 and self:isOnScreen(self.hitObjects[1].StartTime, self.hitObjects[1].Lane) do
@@ -302,4 +302,4 @@ function HitObjectManager:update(dt)
     Group.update(self, dt)
 end
 
-return HitObjectManager
+return ManiaManager

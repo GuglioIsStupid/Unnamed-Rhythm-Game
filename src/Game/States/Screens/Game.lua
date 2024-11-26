@@ -23,9 +23,7 @@ function GameScreen:new(data)
     }
 
     if self.data.gameMode == "Mania" then
-        self.hitObjectManager = HitObjectManager(self)
-    else
-        self.hitObjectManager = MobileObjectManager(self)
+        self.GameManager = ManiaManager(self)
     end
 
     Parsers[self.data.mapType]:parse(self.data.filepath, folderPath)
@@ -33,16 +31,16 @@ function GameScreen:new(data)
     Script:call("Load")
 
     self.song = love.audio.newAdvancedSource(self.data.song)
-    self.hitObjectManager.hitObjects = self.data.hitObjects
-    self.hitObjectManager.scrollVelocities = self.data.scrollVelocities
-    self.hitObjectManager:initSVMarks()
+    self.GameManager.hitObjects = self.data.hitObjects
+    self.GameManager.scrollVelocities = self.data.scrollVelocities
+    self.GameManager:initSVMarks()
 
-    table.sort(self.hitObjectManager.hitObjects, function(a, b) return a.StartTime < b.StartTime end)
-    self.hitObjectManager.scorePerNote = 1000000 / #self.data.hitObjects
+    table.sort(self.GameManager.hitObjects, function(a, b) return a.StartTime < b.StartTime end)
+    self.GameManager.scorePerNote = 1000000 / #self.data.hitObjects
     self.totalNotes = #self.data.hitObjects
     
     if self.data.gameMode == "Mania" then
-        self.hitObjectManager:createReceptors(self.data.mode)
+        self.GameManager:createReceptors(self.data.mode)
     end
 
     -- setup le mobile inputs
@@ -78,7 +76,7 @@ function GameScreen:new(data)
     self:add(self.BG)
     self.BG.scalingType = ScalingTypes.WINDOW_LARGEST
 
-    self:add(self.hitObjectManager)
+    self:add(self.GameManager)
 
     self.HUD = HUD(self)
     self:add(self.HUD)
@@ -129,7 +127,7 @@ end
 
 --- Use judgecount and total notes hit to calculate accuracy
 function GameScreen:calculateAccuracy()
-    local judgeCount = self.hitObjectManager.judgeCounts
+    local judgeCount = self.GameManager.judgeCounts
     local totalNotesHit = judgeCount["marvellous"] +
         judgeCount["perfect"] +
         judgeCount["great"] +

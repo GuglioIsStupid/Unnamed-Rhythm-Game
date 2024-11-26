@@ -1,7 +1,6 @@
 local path = ... .. "."
 
-HitObjectManager = require(path .. "HitObjectManager")
-MobileObjectManager = require(path .. "MobileObjectManager")
+ManiaManager = require(path .. "ManiaManager")
 Skin = require(path .. "SkinManager")
 SongManager = require(path .. "SongManager")
 ModifierManager = require(path .. "ModifierManager")

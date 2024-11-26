@@ -1,3 +1,4 @@
+---@diagnostic disable: unbalanced-assignments
 --------------------------------------------------------------------------------
 -- A library for interfacing with SQLite3 databases.
 --
@@ -452,6 +453,7 @@ local function getstate(context, initstate, size)
   local state = aggregatestate[pid]
   if type(state) == "nil" then
     state = initstate()
+  ---@diagnostic disable-next-line: need-check-nil
     aggregatestate[pid] = state
   end
   return state, pid
@@ -593,6 +595,7 @@ function stmt_mt:resultset(get, maxrecords) T_open(self)
     for i=1,#h do out[i] = o[i] end
   end
   if hask then -- Use colnames indexes.
+    ---@diagnostic disable-next-line: need-check-nil
     for i=1,#h do out[h[i]] = o[i] end
   end
   return out, n
