@@ -22,6 +22,8 @@ function SongManager:loadSongList()
     local filenames = songList[1]
     local ogpaths = songList[2]
     local fileexts = songList[3]
+    -- check all files, if it doesn't exist, remove from db
+    local deletedCount = 0
     local titles = songList[4]
     local artists = songList[5]
     local sources = songList[6]
@@ -44,6 +46,42 @@ function SongManager:loadSongList()
     local metaTypes = songList[23]
     local difficulties = songList[24]
     local npses = songList[25]
+
+    for i = 1, count do
+        if not love.filesystem.getInfo(ogpaths[i]) then
+            db:exec([[DELETE FROM Beatmaps WHERE filename=="]] .. filenames[i] .. [[" AND ogpath=="]] .. ogpaths[i] .. [[" AND fileext=="]] .. fileexts[i] .. [["]])
+            songList[i - deletedCount] = nil
+            filenames[i - deletedCount] = nil
+            ogpaths[i - deletedCount] = nil
+            fileexts[i - deletedCount] = nil
+            titles[i - deletedCount] = nil
+            artists[i - deletedCount] = nil
+            sources[i - deletedCount] = nil
+            tags[i - deletedCount] = nil
+            creators[i - deletedCount] = nil
+            diff_names[i - deletedCount] = nil
+            descriptions[i - deletedCount] = nil
+            paths[i - deletedCount] = nil
+            audio_paths[i - deletedCount] = nil
+            bg_paths[i - deletedCount] = nil
+            preview_times[i - deletedCount] = nil
+            mapset_ids[i - deletedCount] = nil
+            map_ids[i - deletedCount] = nil
+            modes[i - deletedCount] = nil
+            game_modes[i - deletedCount] = nil
+            map_types[i - deletedCount] = nil
+            hitobj_counts[i - deletedCount] = nil
+            ln_counts[i - deletedCount] = nil
+            lengths[i - deletedCount] = nil
+            metaTypes[i - deletedCount] = nil
+            difficulties[i - deletedCount] = nil
+            npses[i - deletedCount] = nil
+            
+            deletedCount = deletedCount + 1
+        end
+    end
+
+    count = count - deletedCount
 
     for i = 1, count do
         -- convert the luajit number to a normal lua number for mapset_id
