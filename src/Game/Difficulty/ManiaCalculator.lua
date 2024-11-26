@@ -118,7 +118,7 @@ function DifficultyCalculator:calculate(notes, laneCount)
         end
 
         bigf = ((bigf * 8) + (leftHandNPS[i] / scale) * 5) / 13 * scale
-        
+
         table.insert(leftHandDiff, bigf)
     end
 
@@ -148,7 +148,7 @@ function DifficultyCalculator:calculate(notes, laneCount)
         end
 
         bigf = ((bigf * 8) + (rightHandNPS[i] / scale) * 5) / 13 * scale
-        
+
         table.insert(rightHandDiff, bigf)
     end
 
@@ -203,9 +203,9 @@ function DifficultyCalculator:chisel(leftHandDiff, rightHandDiff, npsLeftPoint, 
     return upper
 end
 
-function DifficultyCalculator:calculatePoint(mid, diff, points)
+function DifficultyCalculator:calculatePoint(mid, diffs, points)
     local out = 0
-    for i, diff in ipairs(diff) do
+    for i, diff in ipairs(diffs) do
         if mid > diff then
             out = out + (points[i] or 0)
         else

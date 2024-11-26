@@ -122,7 +122,7 @@ function osu:cache(data, filename, path)
         end
     end
 
-    local difficulty, nps = DifficultyCalculator:calculate(curData.notes, curData.mode)
+    local difficulty, nps = DifficultyCalculator.Mania:calculate(curData.notes, curData.mode)
 
     local songData = {
         title = curData.Title,

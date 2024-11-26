@@ -1,3 +1,5 @@
 local path = ... .. "."
 
-DifficultyCalculator = require(path .. "Calculator")
+DifficultyCalculator = {
+    Mania = require(path .. "Calculator")
+}

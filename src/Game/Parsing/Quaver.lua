@@ -75,7 +75,7 @@ function Quaver:cache(data, filename, path)
         end
     end
 
-    difficulty, nps = DifficultyCalculator:calculate(notes, mode)
+    difficulty, nps = DifficultyCalculator.Mania:calculate(notes, mode)
 
     local songData = {
         title = title,

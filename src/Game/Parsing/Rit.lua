@@ -71,7 +71,7 @@ function Rit:cache(data, filename, path)
         ::continue::
     end
 
-    local difficulty, nps = DifficultyCalculator:calculate(curData.notes, curData.Keys)
+    local difficulty, nps = DifficultyCalculator.Mania:calculate(curData.notes, curData.Keys)
 
     local songData = {
         title = curData.Title,

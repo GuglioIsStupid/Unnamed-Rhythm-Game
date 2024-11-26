@@ -79,7 +79,7 @@ function Fluxis:cache(data, filename, path)
         ::continue::
     end
 
-    difficulty, nps = DifficultyCalculator:calculate(notes, 4)
+    difficulty, nps = DifficultyCalculator.Mania:calculate(notes, 4)
 
     local songData = {
         title = title,
