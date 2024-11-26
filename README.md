@@ -6,8 +6,6 @@
 ![GitHub Release](https://img.shields.io/github/v/release/AGORI-Studios/Rit)
 ![GitHub commits since latest release](https://img.shields.io/github/commits-since/AGORI-Studios/Rit/latest)
 
-
-
 A free, open-sourced rhythm game made in Lua using the LÖVE framework.
 
 ## Table of Contents
@@ -24,7 +22,7 @@ A free, open-sourced rhythm game made in Lua using the LÖVE framework.
 
 ## About
 
-Rit is a free, open-sourced rhythm game made in Lua using the LÖVE framework. The game is inspired by games such as Quaver, osu!, Etterna, and StepMania. The game is currently in development and is not yet ready for public use. Testing builds are available in the [Pre-Release page](https://github.com/AGORI-Studios/Rit/releases) 
+Rit is a free, open-sourced rhythm game made in Lua using the LÖVE framework. The game is inspired by games such as Quaver, osu!, Etterna, and StepMania. The game is currently in development and is only available for beta testing. Testing builds are available in the [Pre-Release page](https://github.com/AGORI-Studios/Rit/releases) 
 
 ## Installation (WIP)
 
@@ -51,10 +49,24 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 - [Lumaah](https://github.com/Lumaah) - French translation
 - [Getkirill](https://github.com/getkirill) - Deprecated .ps1 makefile port
 
+## Libraries
+- [LJSqlite3](http://scilua.org/ljsqlite3.html)
+- [Asl](/src/Engine/Lib/asl/LICENSE)
+- [cimgui](https://codeberg.org/apicici/cimgui-love)
+- [Sworks](/src/Engine/Lib/sworks/)
+- [ZorgFFT](/src/Engine/Lib/zorgfft/LICENSE)
+- [MD5](/src/Engine/Lib/md5.lua)
+- [Json](/src/Engine/Format/Json.lua)
+- [Yaml](/src/Engine/Format/Yaml.lua)
+- [Discord-RPC](/src/Game/External/discord-rpc.lua) *
+
+\* Means modified for this project
+
 ## Special Thanks
 - [LÖVE](https://love2d.org/) - The framework used to create this game
 - [Quaver](https://quavergame.com/) - Inspiration for this project
 - [osu!](https://osu.ppy.sh/) - Inspiration for this project
+- [fluXis](https://fluxis.flux.moe) - Inspiration for this project
 - [Etterna](https://etternaonline.com/) - Inspiration for this project
 - [StepMania](https://www.stepmania.com/) - Inspiration for this project
 - [Average4K](https://store.steampowered.com/app/1828580/Average4k/) - Inspiration for this project
