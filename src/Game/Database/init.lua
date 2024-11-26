@@ -5,7 +5,7 @@ function Database:getDBs()
         -- setup
         self.BeatmapDB:exec(
             [[CREATE TABLE IF NOT EXISTS Beatmaps (
-                filename TEXT PRIMARY KEY,
+                filename TEXT,
                 ogpath TEXT,
                 fileext TEXT,
 

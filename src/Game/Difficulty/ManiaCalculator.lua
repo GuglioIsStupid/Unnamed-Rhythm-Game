@@ -183,6 +183,13 @@ function DifficultyCalculator:calculate(notes, laneCount)
 
     local res = self:chisel(leftHandDiff, rightHandDiff, npsLeftPoint, npsRightPoint, maxPoints) * 5
     local nps = #notes / (lastTime / 1000)
+
+    if tostring(res) == "nan" or tostring(res) == "inf" then
+        res = 0
+    end
+    if tostring(nps) == "nan" or tostring(nps) == "inf" then
+        nps = 0
+    end
     return res, nps
 end
 

@@ -223,7 +223,7 @@ function ManiaManager:update(dt)
             hitObject.holdSprite.child.flip.y = true
         end
 
-        if self.musicTime > hitObject.Data.StartTime+360 and hitObject.moveWithScroll then
+        if self.musicTime > hitObject.Data.StartTime+150 and hitObject.moveWithScroll then
             self:remove(hitObject)
             hitObject:destroy()
             table.remove(self.drawableHitObjects, table.findID(self.drawableHitObjects, hitObject))
@@ -232,45 +232,34 @@ function ManiaManager:update(dt)
     end
 
     for i = 1, self.data.mode do
-        local notesInRange = {}
         if Input:wasPressed(self.data.mode .. "k" .. i) then
             Script:call("OnPress", i, self.musicTime)
             if not self.receptorsGroup.objects[i] then return end
             self.receptorsGroup.objects[i].down = true
-
+            local note = nil
             for _, hitObject in ipairs(self.drawableHitObjects) do
                 local abs = math.abs(self.musicTime - hitObject.Data.StartTime)
                 if abs < 360 and hitObject.Data.Lane == i then
-                    table.insert(notesInRange, hitObject)
+                    note = hitObject
+                    break
                 end
             end
 
-            local closest = nil
-            local closestTime = 100000
-            for _, note in ipairs(notesInRange) do
-                local abs = math.abs(self.musicTime - note.Data.StartTime)
-                if abs < closestTime then
-                    closest = note
-                    closestTime = abs
-                end
-            end
-
-            if closest then
-                closest:hit(self.musicTime - closest.Data.StartTime)
-                Script:call("OnHit", i, self.musicTime, closest, self.screen.combo)
-                if not closest.holdSprite then
-                    self:remove(closest)
-                    closest:destroy()
-                    table.remove(self.drawableHitObjects, table.findID(self.drawableHitObjects, closest))
+            if note then
+                note:hit(self.musicTime - note.Data.StartTime)
+                Script:call("OnHit", i, self.musicTime, note, self.screen.combo)
+                if not note.holdSprite then
+                    self:remove(note)
+                    note:destroy()
+                    table.remove(self.drawableHitObjects, table.findID(self.drawableHitObjects, note))
                 else
-                    closest.moveWithScroll = false
+                    note.moveWithScroll = false
                 end
             end
         end
         if Input:isDown(self.data.mode .. "k" .. i) then
             for _, hitObject in ipairs(self.drawableHitObjects) do
                 if hitObject.Data.Lane == i and hitObject.holdSprite and hitObject.holdSprite.endTime - self.musicTime <= 50 then
-                    --[[ hitObject:hit(self.musicTime - hitObject.Data.EndTime) ]]
                     self:remove(hitObject)
                     hitObject:destroy()
                     table.remove(self.drawableHitObjects, table.findID(self.drawableHitObjects, hitObject))

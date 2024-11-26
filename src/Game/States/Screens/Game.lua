@@ -161,7 +161,7 @@ function GameScreen:calculateScore()
 end
 
 function GameScreen:calculateRating()
-    self.rating = self.data.rating * math.pow(self.accuracy / (95/100), 5)
+    self.rating = self.data.rating * math.pow(self.accuracy / (95/100), 4.75)
 end
 
 function GameScreen:kill()
