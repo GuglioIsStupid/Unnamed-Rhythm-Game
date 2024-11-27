@@ -162,7 +162,7 @@ function Rit:parseNoteObjects(line, isCache)
     end
 
     if type == "HIT" and not isCache then
-        local note = UnspawnObject(tonumber(startTime), tonumber(endTime), tonumber(lane))
+        local note = UnspawnObject(tonumber(startTime), tonumber(endTime), tonumber(lane), hitsounds)
         table.insert(state.instance.data.hitObjects, note)
     end
 end

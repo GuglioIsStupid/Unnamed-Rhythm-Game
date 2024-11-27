@@ -11,7 +11,7 @@ function Quaver:parse(path, folderPath)
         noteCount = noteCount + 1
         table.insert(
             state.instance.data.hitObjects,
-            UnspawnObject(note.StartTime, note.EndTime, note.Lane)
+            UnspawnObject(note.StartTime, note.EndTime, note.Lane, note.HitSound)
         )
     end
 

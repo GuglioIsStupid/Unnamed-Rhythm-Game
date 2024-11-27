@@ -34,6 +34,18 @@ end
 
 function HitObject:hit(time)
     States.Screens.Game.instance.judgement:hit(time)
+
+    if self.Data.Hitsounds ~= "" then
+        if self.Data.Hitsounds:find("Whistle") then
+            States.Screens.Game.instance.GameManager.whistleSound:clone():play()
+        elseif self.Data.Hitsounds:find("Finish") then
+            States.Screens.Game.instance.GameManager.finishSound:clone():play()
+        elseif self.Data.Hitsounds:find("Clap") then
+            States.Screens.Game.instance.GameManager.clapSound:clone():play()
+        else
+            States.Screens.Game.instance.GameManager.hitSound:clone():play()
+        end
+    end
 end
 
 function HitObject:resize(w, h)

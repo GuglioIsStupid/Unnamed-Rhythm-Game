@@ -43,6 +43,16 @@ function ManiaManager:new(instance)
         ["miss"] = 0
     }
 
+    self.hitSound = love.audio.newSource(Skin:getPath(Skin.Sounds.Hit["hit"]), "static")
+    self.hitSound:setVolume(SettingsManager:getSetting("Audio", "Effects"))
+    self.whistleSound = love.audio.newSource(Skin:getPath(Skin.Sounds.Hit["hitwhistle"]), "static")
+    self.whistleSound:setVolume(SettingsManager:getSetting("Audio", "Effects"))
+    self.finishSound = love.audio.newSource(Skin:getPath(Skin.Sounds.Hit["hitfinish"]), "static")
+    self.finishSound:setVolume(SettingsManager:getSetting("Audio", "Effects"))
+    self.clapSound = love.audio.newSource(Skin:getPath(Skin.Sounds.Hit["hitclap"]), "static")
+    self.clapSound:setVolume(SettingsManager:getSetting("Audio", "Effects"))
+
+
     self.previousFrameTime = nil
 end
 
@@ -255,6 +265,8 @@ function ManiaManager:update(dt)
                 else
                     note.moveWithScroll = false
                 end
+            else
+                self.hitSound:clone():play()
             end
         end
         if Input:isDown(self.data.mode .. "k" .. i) then
