@@ -45,6 +45,8 @@ function HitObject:hit(time)
         else
             States.Screens.Game.instance.GameManager.hitSound:clone():play()
         end
+    else
+        States.Screens.Game.instance.GameManager.hitSound:clone():play()
     end
 end
 

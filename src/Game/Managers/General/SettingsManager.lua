@@ -24,7 +24,7 @@ local SettingsDefault = {
     },
     Audio = {
         Master = 1,
-        Effects = 0.65,
+        Effects = 0.15,
         Music = 1,
     }
 }

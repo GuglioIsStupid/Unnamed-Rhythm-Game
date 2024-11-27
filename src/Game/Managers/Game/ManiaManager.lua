@@ -189,7 +189,7 @@ end
 function ManiaManager:updateTime(dt)
     self.musicTime = self.musicTime + (self.previousFrameTime and (love.timer.getTime() - self.previousFrameTime) or 0) * 1000
     self.previousFrameTime = love.timer.getTime()
-    if self.musicTime >= 0 then
+    if self.musicTime >= 0 and not self.started then
         self.started = true
         GAME.instance.song:play()
         Script:call("OnSongStart")

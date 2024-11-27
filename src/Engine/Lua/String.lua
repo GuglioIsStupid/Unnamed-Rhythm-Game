@@ -78,4 +78,12 @@ function string:safe()
     return self
 end
 
+function string:unsafe()
+    for k, v in pairs(replacementChars) do
+        self = self:gsub(v, k)
+    end
+
+    return self
+end
+
 return string
