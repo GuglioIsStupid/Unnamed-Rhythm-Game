@@ -130,33 +130,6 @@ function SongManager:loadSongList()
         diffIndexes[mapset_ids[i]] = diffIndexes[mapset_ids[i]] + 1
     end
 
-    --[[ for _, v in ipairs(songList) do
-        -- if file is .scache, delete it    
-        if v:endsWith(".scache") then
-            love.filesystem.remove("CacheData/Beatmaps/" .. v)
-            goto continue
-        end
-        local songData = self:loadCache(v, "CacheData/Beatmaps/" .. v, ".rsc")
-        if not self.songCache[songData.mapset_id or 0] then
-            diffIndexes[songData.mapset_id or 0] = 1
-            self.songCache[songData.mapset_id or 0] = {
-                title = songData.title or "Unknown",
-                artist = songData.artist or "Unknown",
-                creator = songData.creator or "Unknown",
-                mapType = songData.map_type or "Unknown",
-                tags = songData.tags or "Unknown",
-                difficulties = {},
-                index = index
-            }
-
-            index = index + 1
-        end
-        songData.index = diffIndexes[songData.mapset_id or 0]
-        self.songCache[songData.mapset_id or 0].difficulties[songData.map_id or 0] = songData
-        diffIndexes[songData.mapset_id or 0] = diffIndexes[songData.mapset_id or 0] + 1
-        ::continue::
-    end ]]
-
     local sortedList = {}
     for _, v in pairs(self.songCache) do
         table.insert(sortedList, v)

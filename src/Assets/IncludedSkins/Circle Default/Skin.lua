@@ -1,6 +1,4 @@
 -- Skin (not) automatically generated using Rit's skin editor
-local Skin = {}
-
 Skin.Name = "Circle Default"
 Skin.Creator = "Getsaa"
 Skin.Description = "Rit's default skin"
@@ -104,5 +102,3 @@ Skin.Scripts.States = {
     TitleMenu = "scripts/states/TitleMenu.lua",
     SongListMenu = "scripts/states/SongListMenu.lua",
 }
-
-return Skin

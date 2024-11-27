@@ -2,7 +2,13 @@
 local Skin = {}
 
 function Skin:loadSkin(path)
-    self.skin = love.filesystem.load(path)()
+    self.script = love.filesystem.load(path)
+    self.skinEnv = {
+        Skin = {}
+    }
+    setfenv(self.script, self.skinEnv)
+    self.script()
+    self.skin = self.skinEnv.Skin
     self.skin.__lua_path = path
     self.skin.__folder_path = path:match("(.*/)")
     self.skinnedStates = {}
