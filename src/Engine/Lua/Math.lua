@@ -68,3 +68,13 @@ function math.formatStorage(size)
     return string.format("%.2f %s", size, unit)
 end
 
+function math.isNan(x)
+    return tostring(x) == "nan"
+end
+
+function math.isInf(x)
+    return tostring(x) == "inf" or tostring(x) == "-inf"
+end
+
+math.nan = 0 / 0
+math.inf = 1 / 0

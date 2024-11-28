@@ -66,3 +66,9 @@ function table.format(tbl, indent)
     
     return str
 end
+
+function table.pop(tbl, index)
+    local val = tbl[index]
+    table.remove(tbl, index)
+    return val
+end
