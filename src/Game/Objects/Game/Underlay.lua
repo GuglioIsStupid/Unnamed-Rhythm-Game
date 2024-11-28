@@ -9,10 +9,9 @@ function Underlay:new(receptorCount)
     self.x = 1920/2 - self.baseWidth/2
 end
 
-function Underlay:updateCount(count)
+function Underlay:updateCount(count, lastX, lastWidth)
     self.count = count
-    self.baseWidth = 200*count
-    self.width = (200*count) * self.windowScale.x
+    self.width = lastX + lastWidth
     self.baseHeight = 3000
     self.height = 3000 * self.windowScale.y
 

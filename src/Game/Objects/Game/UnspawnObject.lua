@@ -6,7 +6,6 @@ function UnspawnObject:new(startTime, endTime, lane, hitsounds)
     self.EndTime = endTime or 0
     self.Lane = lane or 1
     self.Hitsounds = hitsounds or ""
-    print(self.Hitsounds)
 end
 
 return UnspawnObject

@@ -61,6 +61,7 @@ local midX = 1920/2.45
 function ManiaManager:createReceptors(count)
     self.data = {mode = 4}
     self.data.mode = count
+    local lastX, lastWidth = 0, 0
     local dir = SettingsManager:getSetting("Game", "ScrollDirection")
     for i = 1, self.data.mode do
         local receptor = Receptor(i, count)
@@ -72,10 +73,13 @@ function ManiaManager:createReceptors(count)
             receptor.y = i % 2 == 0 and self.STRUM_Y_DOWN or self.STRUM_Y_UP
         end
         receptor.x = midX + (i - (self.data.mode/2)) * 200
+        lastX = receptor.x
+        lastWidth = receptor.width
         self.receptorsGroup:add(receptor)
     end
 
-    self.underlay:updateCount(count)
+    self.underlay:updateCount(count, lastX, lastWidth)
+    self.underlay:resize(Game._windowWidth, Game._windowHeight)
 
     self:resortReceptors()
 end
