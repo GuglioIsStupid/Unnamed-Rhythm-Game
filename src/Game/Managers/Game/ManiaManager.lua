@@ -254,6 +254,21 @@ function ManiaManager:update(dt)
     self.onBeat = false
     self:updateTime(dt)
 
+    for _, receptor in ipairs(self.receptorsGroup.objects) do
+        local dir = SettingsManager:getSetting("Game", "ScrollDirection")
+        if not self.hasModscript then
+            receptor.y = dir == "Down" and self.STRUM_Y_DOWN or self.STRUM_Y_UP
+            if dir == "Split" then
+                receptor.y = i <= math.ceil(self.data.mode/2) and self.STRUM_Y_DOWN or self.STRUM_Y_UP
+            elseif dir == "Alternate" then
+                receptor.y = i % 2 == 0 and self.STRUM_Y_DOWN or self.STRUM_Y_UP
+            end
+        else
+            receptor.y = Script.downscroll and self.STRUM_Y_DOWN or self.STRUM_Y_UP
+        end
+        receptor:update(love.timer.getDelta())
+    end
+
     if self.musicTime >= 0 then
         if #self.bpmEvents > 0 and self.musicTime >= self.bpmEvents[1][1] then
             self.currentBPM = self.bpmEvents[1][2]

@@ -42,6 +42,7 @@ function Playfield:remove(obj)
 end
 
 function Playfield:update(dt)
+    Group.update(self, dt)
     for _, note in ipairs(self.notes) do
         note:update(dt)
     end
@@ -54,6 +55,7 @@ function Playfield:update(dt)
 end
 
 function Playfield:resize(w, h)
+    Group.resize(self, w, h)
     for _, note in ipairs(self.notes) do
         note:resize(w, h)
     end
