@@ -33,6 +33,8 @@ function ManiaManager:new(instance)
         mode = 4
     }
 
+    self.hasModscript = false
+
     self.judgeCounts = {
         ["marvellous"] = 0,
         ["perfect"] = 0,
@@ -52,7 +54,7 @@ function ManiaManager:new(instance)
     self.clapSound:setVolume(SettingsManager:getSetting("Audio", "Effects"))
 
     self.playfields = {
-        ManiaPlayfield(self.underlay, self.receptorsGroup)
+        ManiaPlayfield(self, self.underlay, self.receptorsGroup)
     }
 
     for i = 1, #self.playfields do

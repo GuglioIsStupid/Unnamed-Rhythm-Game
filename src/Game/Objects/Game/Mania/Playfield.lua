@@ -1,11 +1,14 @@
 local Playfield = Group:extend("Playfield")
 
-function Playfield:new(underlay, receptors)
+function Playfield:new(instance, underlay, receptors)
     Group.new(self)
 
+    self.instance = instance
     self.notes = {}
 
-    self:add(underlay)
+    if not instance.hasModscript then
+        self:add(underlay)
+    end
     self:add(receptors)
 end
 
