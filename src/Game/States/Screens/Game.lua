@@ -27,8 +27,6 @@ function GameScreen:new(data)
     end
 
     Parsers[self.data.mapType]:parse(self.data.filepath, folderPath)
-    Script:loadScript(folderPath .. "script/script.lua")
-    Script:call("Load")
 
     self.song = love.audio.newAdvancedSource(self.data.song)
     self.GameManager.hitObjects = self.data.hitObjects
@@ -42,6 +40,10 @@ function GameScreen:new(data)
     if self.data.gameMode == "Mania" then
         self.GameManager:createReceptors(self.data.mode)
     end
+
+    Script:reset(self.GameManager.receptorsGroup.objects)
+    Script:load(folderPath .. "script/script.lua")
+    Script:call("Load")
 
     -- setup le mobile inputs
     local curkeylist = GameplayBinds[self.data.mode]

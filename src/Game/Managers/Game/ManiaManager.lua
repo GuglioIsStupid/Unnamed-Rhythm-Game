@@ -52,9 +52,9 @@ function ManiaManager:new(instance)
     self.clapSound = love.audio.newSource(Skin:getPath(Skin.Sounds.Hit["hitclap"]), "static")
     self.clapSound:setVolume(SettingsManager:getSetting("Audio", "Effects"))
 
-    self.playfields = {
-        ManiaPlayfield(self, self.underlay, self.receptorsGroup)
-    }
+    self.playfields = {}
+        
+    self.playfields[1] = ManiaPlayfield(self, self.underlay, self.receptorsGroup)
 
     for i = 1, #self.playfields do
         self:add(self.playfields[i])
@@ -81,11 +81,15 @@ function ManiaManager:createReceptors(count)
     for i = 1, self.data.mode do
         local receptor = Receptor(i, count)
         --receptor.y = self.STRUM_Y
-        receptor.y = dir == "Down" and self.STRUM_Y_DOWN or self.STRUM_Y_UP
-        if dir == "Split" then
-            receptor.y = i <= math.ceil(self.data.mode/2) and self.STRUM_Y_DOWN or self.STRUM_Y_UP
-        elseif dir == "Alternate" then
-            receptor.y = i % 2 == 0 and self.STRUM_Y_DOWN or self.STRUM_Y_UP
+        if not self.hasModscript then
+            receptor.y = dir == "Down" and self.STRUM_Y_DOWN or self.STRUM_Y_UP
+            if dir == "Split" then
+                receptor.y = i <= math.ceil(self.data.mode/2) and self.STRUM_Y_DOWN or self.STRUM_Y_UP
+            elseif dir == "Alternate" then
+                receptor.y = i % 2 == 0 and self.STRUM_Y_DOWN or self.STRUM_Y_UP
+            end
+        else
+            receptor.y = Script.downscroll and self.STRUM_Y_DOWN or self.STRUM_Y_UP
         end
         receptor.x = midX + (i - (self.data.mode/2)) * 200
         lastX = receptor.x
@@ -106,11 +110,15 @@ function ManiaManager:resortReceptors()
         -- sort based off of underlay width and pos
         local receptor = self.receptorsGroup.objects[i]
         receptor.x = self.underlay.x + ((i-1) * 200)
-        receptor.y = dir == "Down" and self.STRUM_Y_DOWN or self.STRUM_Y_UP
-        if dir == "Split" then
-            receptor.y = i <= math.ceil(self.data.mode/2) and self.STRUM_Y_DOWN or self.STRUM_Y_UP
-        elseif dir == "Alternate" then
-            receptor.y = i % 2 == 0 and self.STRUM_Y_DOWN or self.STRUM_Y_UP
+        if not self.hasModscript then
+            receptor.y = dir == "Down" and self.STRUM_Y_DOWN or self.STRUM_Y_UP
+            if dir == "Split" then
+                receptor.y = i <= math.ceil(self.data.mode/2) and self.STRUM_Y_DOWN or self.STRUM_Y_UP
+            elseif dir == "Alternate" then
+                receptor.y = i % 2 == 0 and self.STRUM_Y_DOWN or self.STRUM_Y_UP
+            end
+        else
+            receptor.y = Script.downscroll and self.STRUM_Y_DOWN or self.STRUM_Y_UP
         end
         receptor:update(love.timer.getDelta())
     end
@@ -167,40 +175,56 @@ end
 
 function ManiaManager:getNotePosition(time, lane, moveWithScroll)
     local dir = SettingsManager:getSetting("Game", "ScrollDirection")
-    if not moveWithScroll then
-        if dir == "Split" then
-            if lane <= math.ceil(self.data.mode/2) then
+    if not self.hasModscript then
+        if not moveWithScroll then
+            if dir == "Split" then
+                if lane <= math.ceil(self.data.mode/2) then
+                    return self.STRUM_Y_DOWN, true
+                else
+                    return self.STRUM_Y_UP, false
+                end
+            elseif dir == "Alternate" then
+                if lane % 2 == 0 then
+                    return self.STRUM_Y_DOWN, true
+                else
+                    return self.STRUM_Y_UP, false
+                end
+            elseif dir == "Down" then
                 return self.STRUM_Y_DOWN, true
-            else
+            elseif dir == "Up" then
                 return self.STRUM_Y_UP, false
+            end
+        end
+        if dir == "Down" then
+            return self.STRUM_Y_DOWN - (time - self.currentTime) * SettingsManager:getSetting("Game", "ScrollSpeed"), true
+        elseif dir == "Up" then
+            return self.STRUM_Y_UP + (time - self.currentTime) * SettingsManager:getSetting("Game", "ScrollSpeed"), false
+        elseif dir == "Split" then
+            if lane <= math.ceil(self.data.mode/2) then
+                return self.STRUM_Y_DOWN - (time - self.currentTime) * SettingsManager:getSetting("Game", "ScrollSpeed"), true
+            else
+                return self.STRUM_Y_UP + (time - self.currentTime) * SettingsManager:getSetting("Game", "ScrollSpeed"), false
             end
         elseif dir == "Alternate" then
             if lane % 2 == 0 then
+                return self.STRUM_Y_DOWN - (time - self.currentTime) * SettingsManager:getSetting("Game", "ScrollSpeed"), true
+            else
+                return self.STRUM_Y_UP + (time - self.currentTime) * SettingsManager:getSetting("Game", "ScrollSpeed"), false
+            end
+        end
+    else
+        if not moveWithScroll then
+            if Script.downscroll then
                 return self.STRUM_Y_DOWN, true
             else
                 return self.STRUM_Y_UP, false
             end
-        elseif dir == "Down" then
-            return self.STRUM_Y_DOWN, true
-        elseif dir == "Up" then
-            return self.STRUM_Y_UP, false
-        end
-    end
-    if dir == "Down" then
-        return self.STRUM_Y_DOWN - (time - self.currentTime) * SettingsManager:getSetting("Game", "ScrollSpeed"), true
-    elseif dir == "Up" then
-        return self.STRUM_Y_UP + (time - self.currentTime) * SettingsManager:getSetting("Game", "ScrollSpeed"), false
-    elseif dir == "Split" then
-        if lane <= math.ceil(self.data.mode/2) then
-            return self.STRUM_Y_DOWN - (time - self.currentTime) * SettingsManager:getSetting("Game", "ScrollSpeed"), true
         else
-            return self.STRUM_Y_UP + (time - self.currentTime) * SettingsManager:getSetting("Game", "ScrollSpeed"), false
-        end
-    elseif dir == "Alternate" then
-        if lane % 2 == 0 then
-            return self.STRUM_Y_DOWN - (time - self.currentTime) * SettingsManager:getSetting("Game", "ScrollSpeed"), true
-        else
-            return self.STRUM_Y_UP + (time - self.currentTime) * SettingsManager:getSetting("Game", "ScrollSpeed"), false
+            if Script.downscroll then
+                return self.STRUM_Y_DOWN - (time - self.currentTime) * SettingsManager:getSetting("Game", "ScrollSpeed"), true
+            else
+                return self.STRUM_Y_UP + (time - self.currentTime) * SettingsManager:getSetting("Game", "ScrollSpeed"), false
+            end
         end
     end
 end 
