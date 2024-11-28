@@ -7,9 +7,8 @@ function ManiaManager:new(instance)
 
     self.receptorsGroup = TypedGroup(Receptor)
     self.underlay = Underlay(4)
-    self:add(self.underlay)
 
-    self:add(self.receptorsGroup)
+    --[[ self:add(self.receptorsGroup) ]]
     self.hitObjects = {}
     self.drawableHitObjects = {}
     self.scrollVelocities = {}
@@ -52,6 +51,13 @@ function ManiaManager:new(instance)
     self.clapSound = love.audio.newSource(Skin:getPath(Skin.Sounds.Hit["hitclap"]), "static")
     self.clapSound:setVolume(SettingsManager:getSetting("Audio", "Effects"))
 
+    self.playfields = {
+        ManiaPlayfield(self.underlay, self.receptorsGroup)
+    }
+
+    for i = 1, #self.playfields do
+        self:add(self.playfields[i])
+    end
 
     self.previousFrameTime = nil
 end
@@ -224,7 +230,10 @@ function ManiaManager:update(dt)
         drawableHitObject.y = self:getNotePosition(drawableHitObject.initialSVTime, drawableHitObject.Data.Lane, drawableHitObject.moveWithScroll)
         drawableHitObject:resize(Game._windowWidth, Game._windowHeight)
         
-        self:add(drawableHitObject, false)
+        for i = 1, #self.playfields do
+            self.playfields[i]:add(drawableHitObject, false)
+        end
+
         table.insert(self.drawableHitObjects, drawableHitObject)
         table.remove(self.hitObjects, 1)
     end
@@ -238,7 +247,9 @@ function ManiaManager:update(dt)
         end
 
         if self.musicTime > hitObject.Data.StartTime+150 and hitObject.moveWithScroll then
-            self:remove(hitObject)
+            for i = 1, #self.playfields do
+                self.playfields[i]:remove(hitObject)
+            end
             hitObject:destroy()
             table.remove(self.drawableHitObjects, table.findID(self.drawableHitObjects, hitObject))
             self.screen.judgement:hit(1000)
@@ -263,7 +274,9 @@ function ManiaManager:update(dt)
                 note:hit(self.musicTime - note.Data.StartTime)
                 Script:call("OnHit", i, self.musicTime, note, self.screen.combo)
                 if not note.holdSprite then
-                    self:remove(note)
+                    for i = 1, #self.playfields do
+                        self.playfields[i]:remove(note)
+                    end
                     note:destroy()
                     table.remove(self.drawableHitObjects, table.findID(self.drawableHitObjects, note))
                 else
@@ -276,7 +289,9 @@ function ManiaManager:update(dt)
         if Input:isDown(self.data.mode .. "k" .. i) then
             for _, hitObject in ipairs(self.drawableHitObjects) do
                 if hitObject.Data.Lane == i and hitObject.holdSprite and hitObject.holdSprite.endTime - self.musicTime <= 50 then
-                    self:remove(hitObject)
+                    for i = 1, #self.playfields do
+                        self.playfields[i]:remove(hitObject)
+                    end
                     hitObject:destroy()
                     table.remove(self.drawableHitObjects, table.findID(self.drawableHitObjects, hitObject))
                 end
@@ -289,7 +304,9 @@ function ManiaManager:update(dt)
             for _, hitObject in ipairs(self.drawableHitObjects) do
                 if hitObject.Data.Lane == i then
                     if not hitObject.moveWithScroll then
-                        self:remove(hitObject)
+                        for i = 1, #self.playfields do
+                            self.playfields[i]:remove(hitObject)
+                        end
                         hitObject:destroy()
                         table.remove(self.drawableHitObjects, table.findID(self.drawableHitObjects, hitObject))
                     end
