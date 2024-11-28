@@ -1,7 +1,7 @@
 ---@diagnostic disable: duplicate-set-field
 
 local disabledModules = {
-    "os"
+    "os", "io"
 }
 local o_require = require
 function require(path)
