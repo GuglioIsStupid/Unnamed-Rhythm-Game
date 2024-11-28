@@ -139,6 +139,8 @@ function Rit:parseTimingPoints(line, isCache)
     local type, time, value = line:match("^(.-):(.-):(.+)$")
     if type == "SV" then
         table.insert(state.instance.data.scrollVelocities, {StartTime = tonumber(time), Multiplier = tonumber(value)})
+    elseif type == "BPM" then
+        table.insert(state.instance.GameManager.bpmEvents, {StartTime = tonumber(time), Multiplier = tonumber(value)})
     end
 end
 

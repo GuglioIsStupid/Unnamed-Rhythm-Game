@@ -21,6 +21,12 @@ function Quaver:parse(path, folderPath)
             {StartTime = sv.StartTime, Multiplier = sv.Multiplier or 0}
         )
     end
+
+    for _, tp in ipairs(data["TimingPoints"]) do
+        if tp.Bpm then
+            table.insert(state.instance.GameManager.bpmEvents, {tp.StartTime, tp.Bpm})
+        end
+    end
     
     state.instance.data.initialSV = data["InitialScrollVelocity"] or 1
 

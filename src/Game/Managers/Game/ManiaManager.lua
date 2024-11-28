@@ -8,7 +8,6 @@ function ManiaManager:new(instance)
     self.receptorsGroup = TypedGroup(Receptor)
     self.underlay = Underlay(4)
 
-    --[[ self:add(self.receptorsGroup) ]]
     self.hitObjects = {}
     self.drawableHitObjects = {}
     self.scrollVelocities = {}
@@ -60,6 +59,14 @@ function ManiaManager:new(instance)
     for i = 1, #self.playfields do
         self:add(self.playfields[i])
     end
+
+    self.bpmEvents = {}
+    self.exactBeat = 0
+    self.currentBPM = 100
+    self.currentBeat = 0
+    self.currentBPMInterval = 60000 / self.currentBPM
+    self.currentBPMTime = 0
+    self.onBeat = false
 
     self.previousFrameTime = nil
 end
@@ -220,7 +227,28 @@ function ManiaManager:resize(w, h)
 end
 
 function ManiaManager:update(dt)
+    self.onBeat = false
     self:updateTime(dt)
+
+    if self.musicTime >= 0 then
+        if #self.bpmEvents > 0 and self.musicTime >= self.bpmEvents[1][1] then
+            self.currentBPM = self.bpmEvents[1][2]
+            self.currentBPMInterval = 60000 / self.currentBPM
+            self.currentBPMTime = 0
+            table.remove(self.bpmEvents, 1)
+        end
+        self.currentBPMTime = self.currentBPMTime + dt * 1000
+        if self.currentBPMTime >= self.currentBPMInterval then
+            self.currentBeat = self.currentBeat + 1
+            self.currentBPMTime = self.currentBPMTime - self.currentBPMInterval
+            self.onBeat = true
+        end
+        self.exactBeat = self.musicTime / (60000 / self.currentBPM)
+
+        --[[ if self.onBeat and self.currentBeat % 4 == 0 then
+            print(string.format("Beat modulo 4, %s, %s, %s", self.currentBeat, self.currentBPM, self.exactBeat))
+        end ]]
+    end
 
     while #self.hitObjects > 0 and self:isOnScreen(self.hitObjects[1].StartTime, self.hitObjects[1].Lane) do
         local hitObject = self.hitObjects[1]
