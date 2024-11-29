@@ -19,7 +19,7 @@ function Drunk:getPos(time, visualDiff, timeDiff, beat, pos, data, playfield, ob
     local bumpPerc = self:getSubmodValue("Bumpy", playfield)
     local tipZPerc = self:getSubmodValue("TipZ", playfield)
 
-    local time = musicTime / 1000
+    local time = States.Screens.Game.instance.GameManager.musicTime / 1000
 
     if drunkPerc ~= 0 then
         local speed = self:getSubmodValue("DrunkSpeed", playfield)

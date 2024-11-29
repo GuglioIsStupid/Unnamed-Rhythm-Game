@@ -15,7 +15,7 @@ function Move:getPos(time, visualDiff, timeDiff, beat, pos, data, playfield, obj
     local convertedPos = moveXPert * (rightSide - leftSide) / 2
 
     --[[ pos.x = pos.x + convertedPos ]]
-    local p = states.game.Gameplay.playfields[playfield]
+    local p = States.Screens.Game.instance.GameManager.playfields[playfield]
     p.offset.x = convertedPos
 
     return pos
@@ -24,7 +24,7 @@ end
 function Move:getSubmods()
     local subMods = {"MoveY"}
 
-    for i = 1, states.game.Gameplay.mode do
+    for i = 1, #States.Screens.Game.instance.GameManager.receptorsGroup.objects do
         table.insert(subMods, "AMove" .. i .. "X")
         table.insert(subMods, "AMove" .. i .. "Y")
     end

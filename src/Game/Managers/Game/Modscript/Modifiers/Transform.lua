@@ -20,7 +20,7 @@ end
 function Transform:getSubmods()
     local subMods = {"TransformY", "TransformZ", "TransformX-a", "TransformY-a", "TransformZ-a"}
 
-    for i = 1, states.game.Gameplay.mode do
+    for i = 1, #States.Screens.Game.instance.GameManager.receptorsGroup.objects do
         table.insert(subMods, "Transform" .. i .. "X")
         table.insert(subMods, "Transform" .. i .. "Y")
         table.insert(subMods, "Transform" .. i .. "Z")

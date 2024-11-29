@@ -15,7 +15,7 @@ function Beat:getPos(time, visualDiff, timeDiff, beat, pos, data, playfield, obj
     local accelTime = 0.3
     local totalTime = 0.7
 
-    local beat = states.game.Gameplay.soundManager:getDecBeat("music") + accelTime
+    local beat = States.Screens.Game.instance.GameManager.exactBeat + accelTime
     local evenBeat = beat % 2 ~= 0
 
     if beat < 0 then return pos end

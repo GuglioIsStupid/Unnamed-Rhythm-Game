@@ -19,7 +19,7 @@ end
 function Confusion:getSubmods()
     local subMods = {"NoteAngle", "ReceptorAngle"}
 
-    for i = 1, states.game.Gameplay.mode do
+    for i = 1, #States.Screens.Game.instance.GameManager.receptorsGroup.objects do
         table.insert(subMods, "Note" .. i .. "Angle")
         table.insert(subMods, "Receptor" .. i .. "Angle")
         table.insert(subMods, "Confusion" .. i)
