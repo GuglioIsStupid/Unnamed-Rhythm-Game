@@ -72,3 +72,12 @@ function table.pop(tbl, index)
     table.remove(tbl, index)
     return val
 end
+
+function table.const(tbl)
+    return setmetatable({}, {
+        __index = tbl,
+        __newindex = function()
+            error("Attempt to modify a constant table", 2)
+        end
+    })
+end
