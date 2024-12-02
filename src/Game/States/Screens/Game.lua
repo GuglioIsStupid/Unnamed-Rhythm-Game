@@ -69,8 +69,8 @@ function GameScreen:new(data)
             })
         end
 
-        GameplayPad = VirtualPad(keys)
-        VirtualPad._CURRENT = GameplayPad
+        VirtualPad.GameplayPad = VirtualPad(keys)
+        VirtualPad._CURRENT = VirtualPad.GameplayPad
     end
 
     self.BG = Background(self.data.bgFile)
@@ -169,9 +169,8 @@ end
 function GameScreen:kill()
     State.kill(self)
     self = nil
-    self = nil
     if VirtualPad then
-        VirtualPad._CURRENT = MenuPad
+        VirtualPad._CURRENT = VirtualPad.MenuPad
     end
 end
 

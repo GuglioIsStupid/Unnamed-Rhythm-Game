@@ -10,7 +10,7 @@ InputClass = require(path .. "Input")
 if love.system.isMobile() then
     VirtualPad = require(path .. "VirtualPad")
 
-    MenuPad = VirtualPad({
+    VirtualPad.MenuPad = VirtualPad({
         {
             key = "return",
             size = {256, 256},
@@ -49,12 +49,12 @@ if love.system.isMobile() then
         }
     })
 
-    GameplayPad = VirtualPad({
+    VirtualPad.GameplayPad = VirtualPad({
         {
         }
     })
 
-    VirtualPad._CURRENT = MenuPad
+    VirtualPad._CURRENT = VirtualPad.MenuPad
 end
 
 function splitInputChars(str)
