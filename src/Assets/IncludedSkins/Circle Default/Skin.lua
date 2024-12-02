@@ -101,4 +101,5 @@ Skin.Scripts = {}
 Skin.Scripts.States = {
     TitleMenu = "scripts/states/TitleMenu.lua",
     SongListMenu = "scripts/states/SongListMenu.lua",
+    ResultsScreen = "scripts/states/ResultsScreen.lua",
 }

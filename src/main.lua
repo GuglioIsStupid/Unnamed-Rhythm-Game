@@ -96,6 +96,18 @@ function love.resize(w, h)
 end
 
 function love.keypressed(key, scancode, isrepeat)
+    --[[ if love.keyboard.isDown("lalt") and key == "f1" then
+        Game:SwitchState(Skin:getSkinnedState("ResultsScreen"), {
+            score = 1000000,
+            accuracy = 1,
+            performance = 100,
+            maxCombo = 100,
+            judgement = {
+                0, 0, 0, 0, 0
+            },
+            hitTimes = {} -- TODO: Add hit times
+        })
+    end ]]
     Input:keypressed(key)
     Game:keypressed(key, scancode, isrepeat)
 end

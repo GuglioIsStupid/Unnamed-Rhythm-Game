@@ -388,7 +388,21 @@ function ManiaManager:update(dt)
 
     if (self.musicTime or 0) > ((self.length or 1000)+500) then
         Script:call("OnSongEnd")
-        Game:SwitchState(Skin:getSkinnedState("SongListMenu"))
+        Game:SwitchState(Skin:getSkinnedState("ResultsScreen"), {
+            score = self.screen.score,
+            accuracy = self.screen.accuracy,
+            performance = self.screen.performance,
+            maxCombo = self.screen.maxCombo,
+            judgement = {
+                self.judgeCounts["marvellous"],
+                self.judgeCounts["perfect"],
+                self.judgeCounts["great"],
+                self.judgeCounts["good"],
+                self.judgeCounts["bad"],
+                self.judgeCounts["miss"]
+            },
+            hitTimes = {} -- TODO: Add hit times
+        })
     end
     Group.update(self, dt)
 end

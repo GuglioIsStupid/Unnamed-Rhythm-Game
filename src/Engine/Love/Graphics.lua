@@ -8,16 +8,16 @@ function love.graphics.printWithTrimmed(text, x, y, limit, sx, sy, kx, ky)
         end
         text = trimmed .. "..."
     end
-    love.graphics.print(text, x, y, 0, sx, sy, 0, 0, kx, ky)
+    love.graphics.print(tostring(text or ""), x, y, 0, sx, sy, 0, 0, kx, ky)
 end
 
 local o_graphics_print = love.graphics.print
 local o_graphics_printf = love.graphics.printf
 
 function love.graphics.print(txt, ...)
-    o_graphics_print(txt:unsafe(), ...)
+    o_graphics_print(tostring(txt):unsafe(), ...)
 end
 
 function love.graphics.printf(txt, ...)
-    o_graphics_printf(txt:unsafe(), ...)
+    o_graphics_printf(tostring(txt):unsafe(), ...)
 end
