@@ -31,6 +31,12 @@ function ResultsScreen:new(data)
     self:add(self.accuracyTxt)
     self:add(self.performanceTxt)
     self:add(self.maxComboTxt)
+end 
+
+function ResultsScreen:update(dt)
+    if Input:wasPressed("MenuConfirm") then
+        Game:SwitchState(Skin:getSkinnedState("SongListMenu"))
+    end
 end
 
 return ResultsScreen
