@@ -270,7 +270,7 @@ function ManiaManager:update(dt)
     end
 
     if self.musicTime >= 0 then
-        if #self.bpmEvents > 0 and self.musicTime >= self.bpmEvents[1][1] then
+        if #self.bpmEvents > 0 and self.musicTime >= ((self.bpmEvents[1] or {})[1] or math.inf) then
             self.currentBPM = self.bpmEvents[1][2]
             self.currentBPMInterval = 60000 / self.currentBPM
             self.currentBPMTime = 0
