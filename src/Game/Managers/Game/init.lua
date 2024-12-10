@@ -1,6 +1,6 @@
 local path = ... .. "."
 
-ManiaManager = require(path .. "ManiaManager")
+require(path .. "Modes")
 Skin = require(path .. "SkinManager")
 SongManager = require(path .. "SongManager")
 ModifierManager = require(path .. "ModifierManager")
