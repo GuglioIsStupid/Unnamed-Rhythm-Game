@@ -104,6 +104,16 @@ function SongCache:loadCache(filename, ogPath, fileExt)
         songData.metaType = 4
         songData.game_mode = "Mania"
         return self:createCache(songData, filename, fileExt, ogPath)
+    elseif fileExt == ".sm" then
+        local data = love.filesystem.read(ogPath)
+        local diffs = Parsers.Stepmania:getAllDifficulties(data)
+        for _, diff in ipairs(diffs) do
+            local songData = Parsers.Stepmania:cache(data, filename, ogPath, nil, diff)
+            songData.metaType = 4
+            songData.game_mode = "Mania"
+
+            self:createCache(songData, filename, fileExt, ogPath)
+        end
     end
 end
 
@@ -136,6 +146,12 @@ function SongCache:loadSongsPath(path)
                     local fullPath = path .. "/" .. file .. "/" .. song
                     local fileExt = ".fsc"
                     
+                    self:loadCache(filename, fullPath, fileExt)
+                elseif song:endsWith(".sm") then
+                    local filename = song:gsub(".sm$", "")
+                    local fullPath = path .. "/" .. file .. "/" .. song
+                    local fileExt = ".sm"
+
                     self:loadCache(filename, fullPath, fileExt)
                 end
             end
