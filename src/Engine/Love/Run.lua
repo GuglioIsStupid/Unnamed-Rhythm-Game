@@ -3,7 +3,6 @@ local threadEvent = love.thread.newThread("Engine/Threads/EventThread.lua")
 
 local channel_event = love.thread.getChannel("thread.event")
 local channel_active = love.thread.getChannel("thread.event.active")
-local channel_tick = love.thread.getChannel("thread.event.tick")
 
 local drawCur, drawFPS = 0, 0
 

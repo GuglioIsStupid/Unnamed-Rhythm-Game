@@ -193,7 +193,7 @@ function love.quit()
 
         debug.log("Writing global list to file")
 
-        love.filesystem.write("globalList.txt", table.concat(globalList, "\n"))
+        love.filesystem.write("globalList.txt", table.concat(globalList, "\n") .. "\n" .. #globalList .. " globals")
     end
 
     Database:closeDBs()
