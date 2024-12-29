@@ -48,6 +48,12 @@ function Game:initialize()
     end
 end
 
+function Game:toggleFullscreen()
+    local fullscreen = not love.window.getFullscreen()
+    love.window.setFullscreen(fullscreen)
+    return fullscreen
+end
+
 function Game:kill()
     Game.super.kill(self)
 

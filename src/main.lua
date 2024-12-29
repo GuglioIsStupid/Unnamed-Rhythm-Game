@@ -108,6 +108,12 @@ function love.keypressed(key, scancode, isrepeat)
             hitTimes = {} -- TODO: Add hit times
         })
     end ]]
+    if love.keyboard.isDown("lalt") then
+        -- TODO: Add other lalt binds here
+        if key == "return" then
+            Game:toggleFullscreen()
+        end
+    end
     Input:keypressed(key)
     Game:keypressed(key, scancode, isrepeat)
 end
