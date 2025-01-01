@@ -20,14 +20,30 @@ local function setupFolders()
     
     love.filesystem.createDirectory("Data")
     love.filesystem.createDirectory("Beatmaps")
+    love.filesystem.createDirectory("PPDPacks")
 
-        love.filesystem.write("readme.txt", [[
+    love.filesystem.write("readme.txt", [[
 Folder structure:
 - CacheData: Contains cached data for the game. Deleting this folder will cause the game to regenerate the cache, causing longer load times.
 - Data: Contains data for the game. This folder is used for storing settings and other data.
 - Beatmaps: Contains parsed beatmaps for the game. This folder for storing your beatmaps.
 ]])
 
+    love.filesystem.write("PPDPacks/readme.txt", [[
+Folder structure:
+- SongPack
+    - mod_pv_db.txt
+    - sound/
+        - song/
+            - pv_id{_ext}.ogg
+    - script/
+        - song/
+            - pv_id.dsc
+
+This layout is strict.
+]])
+
+    PPDCache:parsePPDPacks("PPDPacks")
     SongCache:loadSongsPath("Assets/IncludedSongs")
     SongCache:loadSongsPath("Beatmaps")
 end

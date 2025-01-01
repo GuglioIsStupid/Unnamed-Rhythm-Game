@@ -71,7 +71,21 @@ function Rit:cache(data, filename, path)
         ::continue::
     end
 
-    local difficulty, nps = DifficultyCalculator.Mania:calculate(curData.notes, curData.Keys)
+    local gamemode = "Mania"
+    curData.GameMode = tonumber(curData.GameMode)
+    
+    if curData.GameMode == 1 then
+        gamemode = "Mania"
+    elseif curData.GameMode == 2 then
+        gamemode = "Mobile"
+    elseif curData.GameMode == 3 then
+        gamemode = "PPD"
+    end
+    local difficulty, nps = 0, 0
+
+    if gamemode == "Mania" then
+        difficulty, nps = DifficultyCalculator.Mania:calculate(curData.notes, curData.Keys)
+    end
 
     local songData = {
         title = curData.Title,
@@ -88,7 +102,7 @@ function Rit:cache(data, filename, path)
         mapset_id = curData.MapSetID,
         map_id = curData.MapID,
         mode = curData.Keys,
-        game_mode = "Mania",
+        game_mode = gamemode,
         hitobj_count = curData.noteCount,
         ln_count = curData.lnCount,
         length = curData.length,
@@ -125,7 +139,7 @@ function Rit:parseMetadata(line)
     elseif key == "InitialSV" then
         curData.InitialSV = value
     elseif key == "GameMode" then
-        -- 1 = Mania, 2 = Mobile, TODO: More modes
+        -- 1 = Mania, 2 = Mobile, 3 = PPD
         curData.GameMode = value
         if state.instance and state.instance.data then
             state.instance.data.gameMode = value
@@ -148,12 +162,20 @@ function Rit:parseNoteObjects(line, isCache)
     local type, lane, startTime, endTime, hitsounds = line:match("^(.-):(.-):(.-):(.-):(.-)$")
     if isCache then
         noteCount = noteCount + 1
-        local hasEndtime = tonumber(endTime or 0) > tonumber(startTime or 0)
-        if hasEndtime then
-            curData.length = math.max(curData.length, tonumber(endTime))
-            curData.lnCount = curData.lnCount + 1
+        if type == "HIT" then
+            local hasEndtime = tonumber(endTime or 0) > tonumber(startTime or 0)
+            if hasEndtime then
+                curData.length = math.max(curData.length, tonumber(endTime))
+                curData.lnCount = curData.lnCount + 1
+            else
+                curData.length = math.max(curData.length, tonumber(startTime))
+            end
         else
-            curData.length = math.max(curData.length, tonumber(startTime))
+            -- format is different !!
+            -- type, notetype, holdtimer, starttime (STARTTIME WILL BE A DECIMAL
+            type, lane, startTime, endTime = line:match("^(.-):(.-):(.-):(.-)$")
+            -- we'll use the same vars, but for different purposes
+            curData.length = math.max(curData.length, tonumber(endTime or 0))
         end
 
         local note = {

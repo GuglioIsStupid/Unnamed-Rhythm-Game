@@ -71,7 +71,6 @@ function SongCache:createCache(songData, filename, fileExt, ogPath)
     return data
 end
 
-
 function SongCache:loadCache(filename, ogPath, fileExt)
     local db = Database.BeatmapDB
     local data = db:exec([[SELECT * FROM Beatmaps WHERE filename=="]] .. filename .. [[" AND ogpath=="]] .. ogPath .. [[" AND fileext=="]] .. fileExt .. [["]])
