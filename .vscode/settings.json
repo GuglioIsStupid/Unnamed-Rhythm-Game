@@ -1,5 +1,6 @@
 {
     "pixelbyte.love2d.srcDir": "./src/",
+    "pixelbyte.love2d.path": "D:\\Code\\Rit\\megasource\\build\\love\\Release\\love.exe",
     "Lua.runtime.version": "LuaJIT",
     "Lua.diagnostics.disable": [
         "param-type-mismatch",

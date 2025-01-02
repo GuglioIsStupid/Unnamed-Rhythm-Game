@@ -21,7 +21,7 @@ lovefile:
 win64: lovefile
 	mkdir build/$(GameName)-win64
 
-	wget https://github.com/love2d/love/releases/download/11.5/love-11.5-win64.zip
+	wget https://github.com/AGORI-Studios/love/releases/download/11.5-mod.1/love-windows-x64.zip
 	mv -f love-11.5-win64.zip requirements/win64/
 	unzip requirements/win64/love-11.5-win64.zip -d requirements/win64
 	mv -f requirements/win64/love-11.5-win64 requirements/win64/love

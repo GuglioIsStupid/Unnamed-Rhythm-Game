@@ -28,7 +28,12 @@ function GameScreen:new(data)
 
     Parsers[self.data.mapType]:parse(self.data.filepath, folderPath)
 
-    self.song = love.audio.newAdvancedSource(self.data.song)
+    self.song = love.audio.newSource(self.data.song, "static")
+    --[[ print(self.song:getDuration())
+    self.song:setPitch(2) ]]
+    if self.song:getChannelCount() == 4 then
+        self.song:setPitch(2)
+    end
     self.GameManager.hitObjects = self.data.hitObjects
     self.GameManager.scrollVelocities = self.data.scrollVelocities
     self.GameManager:initSVMarks()
