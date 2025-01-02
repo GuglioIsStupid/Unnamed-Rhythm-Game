@@ -23,10 +23,10 @@ win64: lovefile
 
 	wget https://github.com/AGORI-Studios/love/releases/download/11.5-mod.1/love-windows-x64.zip
 	mv -f /love-windows-x64.zip requirements/win64/
-	unzip requirements/win64//love-windows-x64.zip -d requirements/win64
-	mv -f requirements/win64//love-windows-x64 requirements/win64/love
+	unzip requirements/win64/love-windows-x64.zip -d requirements/win64
+	mv -f requirements/win64/love-windows-x64 requirements/win64/love
 	
-	rm requirements/win64//love-windows-x64.zip
+	rm requirements/win64/love-windows-x64.zip
 
 	cp -r requirements/win64/love/* build/$(GameName)-win64
 	rm -rf requirements/win64/love
