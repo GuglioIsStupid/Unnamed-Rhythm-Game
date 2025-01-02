@@ -28,6 +28,8 @@ win64: lovefile
 	
 	rm requirements/win64/love-windows-x64.zip
 
+	cp requirements/win64/*.dll build/$(GameName)-win64
+
 	cp -r requirements/win64/love/* build/$(GameName)-win64
 	rm -rf requirements/win64/love
 
