@@ -1,8 +1,11 @@
 function love.graphics.printWithTrimmed(text, x, y, limit, sx, sy, kx, ky)
+    text = text:removeUnsafeUTF8()
+    print("Printing text: " .. text)
     local font = love.graphics.getFont()
     local width = font:getWidth(text)
     if width > limit then
         local trimmed = text
+        print("Trimming text: " .. text)
         while font:getWidth(trimmed .. "...") > limit do
             trimmed = trimmed:sub(1, #trimmed - 1)
         end

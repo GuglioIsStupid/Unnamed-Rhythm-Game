@@ -128,6 +128,9 @@ local function readInt32(file, offset)
 end
 
 function FTCache:parseToRitc(id, data, script, folderName, packName, diffName, audioname, variations, variationCount)
+    if not data then
+        return
+    end
     local CURRENT_TIME = 0
     local opc, len, params
     local map = {}
@@ -209,7 +212,7 @@ function FTCache:parseToRitc(id, data, script, folderName, packName, diffName, a
         return a.time < b.time
     end)
 
-    for i = 1, variationCount do
+    for i = 1, variationCount or 1 do
         local mapScript = string.format([[
 [Metadata]
 Title: %s
@@ -246,11 +249,15 @@ GameMode: 3
 
         for i, event in ipairs(map) do
             if event.type == "TARGET" then
-                mapScript = mapScript .. "TARGET:" .. event.params[1] .. ":" .. event.params[2] .. ":" .. event.time/10
+                --[[ mapScript = mapScript .. "TARGET:" .. event.params[1] .. ":" .. event.params[2] .. ":" ]]
+                -- type, holdTimer, holdEnd, x, y, angle, waveCount, distance, ampliture, tft, ts, time
+                mapScript = string.format("%sTARGET:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s",
+                    mapScript,
+                    event.params[1], event.params[2], event.params[3], event.params[2], event.params[3], event.params[4], event.params[7], event.params[5], event.params[5], event.params[10] or 750, event.params[11] or 0, event.time)
             elseif event.type == "BAR_TIME_SET" then
-                mapScript = mapScript .. "BAR_TIME_SET:" .. event.params[1] .. ":" .. event.params[2] .. ":" .. event.time/10
+                mapScript = mapScript .. "BAR_TIME_SET:" .. event.params[1] .. ":" .. event.params[2] .. ":" .. event.time
             elseif event.type == "TARGET_FLYING_TIME" then
-                mapScript = mapScript .. "TARGET_FLYING_TIME:" .. event.params[1] .. ":" .. event.time/10
+                mapScript = mapScript .. "TARGET_FLYING_TIME:" .. event.params[1] .. ":" .. event.time
             end
 
             mapScript = mapScript .. "\n"
@@ -305,6 +312,7 @@ function FTCache:parseFTPacks(path)
                 if id == "pv" then 
                     id = original
                 end
+                print(id)
                 variationCount[id] = (variationCount[id] or 0) + 1
                 variations[id] = variations[id] or {}
                 local extWithoutID = original:match("_(.*)$")

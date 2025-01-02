@@ -47,6 +47,25 @@ function SongManager:loadSongList()
     local difficulties = songList[24]
     local npses = songList[25]
 
+    for _, title in ipairs(titles) do
+        title = title:removeUnsafeUTF8()
+    end
+    for _, artist in ipairs(artists) do
+        artist = artist:removeUnsafeUTF8()
+    end
+    for _, sources in ipairs(sources) do
+        sources = sources:removeUnsafeUTF8()
+    end
+    for _, tags in ipairs(tags) do
+        tags = tags:removeUnsafeUTF8()
+    end
+    for _, creators in ipairs(creators) do
+        creators = creators:removeUnsafeUTF8()
+    end
+    for _, diff_name in ipairs(diff_names) do
+        diff_name = diff_name:removeUnsafeUTF8()
+    end
+
     for i = 1, count do
         if not love.filesystem.getInfo(ogpaths[i]) then
             db:exec([[DELETE FROM Beatmaps WHERE filename=="]] .. filenames[i] .. [[" AND ogpath=="]] .. ogpaths[i] .. [[" AND fileext=="]] .. fileexts[i] .. [["]])

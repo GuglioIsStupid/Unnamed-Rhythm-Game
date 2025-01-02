@@ -183,7 +183,7 @@ function Drawable:draw()
         love.graphics.setBlendMode(self.blendMode, self.blendModeAlpha)
         love.graphics.setColor(self.colour[1], self.colour[2], self.colour[3], self.alpha)
 
-        love.graphics.rectangle("fill", self.drawX, self.drawY, self.width, self.height, self.roundingX + self.rounding, self.roundingY + self.rounding)
+        love.graphics.rectangle("fill", self.drawX, self.drawY, self.width*self.scale.x, self.height*self.scale.y, self.roundingX + self.rounding, self.roundingY + self.rounding)
 
         love.graphics.setColor(lastColour)
         love.graphics.setBlendMode(lastBlendMode, lastBlendModeAlpha)

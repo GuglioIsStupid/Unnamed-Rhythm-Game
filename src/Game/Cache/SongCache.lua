@@ -93,9 +93,9 @@ function SongCache:loadCache(filename, ogPath, fileExt)
         return self:createCache(songData, filename, fileExt, ogPath)
     elseif fileExt == ".ritc" then
         local data = love.filesystem.read(ogPath)
-        local songData = Parsers.Rit:cache(data, filename, ogPath)
+        local songData, gamemode = Parsers.Rit:cache(data, filename, ogPath)
         songData.metaType = 3
-        songData.game_mode = "Mania"
+        songData.game_mode = gamemode
         return self:createCache(songData, filename, fileExt, ogPath)
     elseif fileExt == ".fsc" then
         local data = love.filesystem.read(ogPath)

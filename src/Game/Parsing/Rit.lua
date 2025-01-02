@@ -72,7 +72,7 @@ function Rit:cache(data, filename, path)
     end
 
     local gamemode = "Mania"
-    curData.GameMode = tonumber(curData.GameMode)
+    curData.GameMode = tonumber(curData.GameMode) or 1
     
     if curData.GameMode == 1 then
         gamemode = "Mania"
@@ -113,7 +113,7 @@ function Rit:cache(data, filename, path)
         nps = nps
     }
     
-    return songData
+    return songData, gamemode
 end
 
 function Rit:parseMetadata(line)
@@ -139,11 +139,7 @@ function Rit:parseMetadata(line)
     elseif key == "InitialSV" then
         curData.InitialSV = value
     elseif key == "GameMode" then
-        -- 1 = Mania, 2 = Mobile, 3 = FT
         curData.GameMode = value
-        if state.instance and state.instance.data then
-            state.instance.data.gameMode = value
-        end
     end
 end
 
@@ -159,10 +155,15 @@ function Rit:parseTimingPoints(line, isCache)
 end
 
 function Rit:parseNoteObjects(line, isCache)
-    local type, lane, startTime, endTime, hitsounds = line:match("^(.-):(.-):(.-):(.-):(.-)$")
+    local type, lane, startTime, endTime, hitsounds--[[  = line:match("^(.-):(.-):(.-):(.-):(.-)$") ]]
+    -- get JUST the type
+    local type = line:match("^(.-):")
+
+    local holdTimer, holdEnd, x, y, angle, waveCount, distance, amplitude, tft, ts
     if isCache then
         noteCount = noteCount + 1
         if type == "HIT" then
+            type, lane, startTime, endTime, hitsounds = line:match("^(.-):(.-):(.-):(.-):(.-)$")
             local hasEndtime = tonumber(endTime or 0) > tonumber(startTime or 0)
             if hasEndtime then
                 curData.length = math.max(curData.length, tonumber(endTime))
@@ -170,12 +171,10 @@ function Rit:parseNoteObjects(line, isCache)
             else
                 curData.length = math.max(curData.length, tonumber(startTime))
             end
-        else
+        elseif type == "TARGET" then
             -- format is different !!
-            -- type, notetype, holdtimer, starttime (STARTTIME WILL BE A DECIMAL
-            type, lane, startTime, endTime = line:match("^(.-):(.-):(.-):(.-)$")
-            -- we'll use the same vars, but for different purposes
-            curData.length = math.max(curData.length, tonumber(endTime or 0))
+            type, lane, holdTimer, holdEnd, x, y, angle, waveCount, distance, amplitude, tft, ts, startTime = line:match("^(.-):(.-):(.-):(.-):(.-):(.-):(.-):(.-):(.-):(.-):(.-):(.-):(.-)$")
+            curData.length = math.max(curData.length, tonumber(startTime) or 0)
         end
 
         local note = {
@@ -188,6 +187,27 @@ function Rit:parseNoteObjects(line, isCache)
     if type == "HIT" and not isCache then
         local note = UnspawnObject(tonumber(startTime), tonumber(endTime), tonumber(lane), hitsounds)
         table.insert(state.instance.data.hitObjects, note)
+    elseif type == "TARGET" and not isCache then
+        type, lane, holdTimer, holdEnd, x, y, angle, waveCount, distance, amplitude, tft, ts, startTime = line:match("^(.-):(.-):(.-):(.-):(.-):(.-):(.-):(.-):(.-):(.-):(.-):(.-):(.-)$")
+        local note = UnspawnFTObject(
+            "TARGET",
+            tonumber(lane),
+            tonumber(holdTimer),
+            tonumber(holdEnd),
+            tonumber(x),
+            tonumber(y),
+            tonumber(angle),
+            tonumber(waveCount),
+            tonumber(distance),
+            tonumber(amplitude),
+            tonumber(tft),
+            tonumber(ts),
+            tonumber(startTime)
+        )
+        table.insert(state.instance.data.hitObjects, note)
+    elseif type == "TARGET_FLYING_TIME" and not isCache then
+        type, tft, time = line:match("^(.-):(.-):(.-)$")
+        table.insert(state.instance.data.hitObjects, FTFlyingTime(tonumber(tft), tonumber(time)))
     end
 end
 

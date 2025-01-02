@@ -86,4 +86,12 @@ function string:unsafe()
     return self
 end
 
+function string:removeUnsafeUTF8()
+    local result = self
+    -- REMOVE ALL CHARACTERS THAT AREN'T ASCII
+    result = result:gsub("[\194-\244][\128-\191]*", "")
+    
+    return result
+end
+
 return string

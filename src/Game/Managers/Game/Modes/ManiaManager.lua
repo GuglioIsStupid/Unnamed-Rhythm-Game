@@ -69,6 +69,33 @@ function ManiaManager:new(instance)
     self.onBeat = false
 
     self.previousFrameTime = nil
+
+    local curkeylist = GameplayBinds[self.data.mode]
+    if love.system.isMobile() then
+        local keys = {}
+        for i, key in ipairs(string.splitAllChars(curkeylist)) do
+            -- calculate size and position for the mobile button (1920 width, at bottom of screen)
+            local size = {1920 / #curkeylist, 1080 / 2}
+            local position = {(i - 1) * size[1], 1080 - size[2]}
+            local color = {1, 1, 1}
+            local alpha = 0.25
+            local downAlpha = 0.5
+            local border = true
+            
+            table.insert(keys, {
+                key = key,
+                size = size,
+                position = position,
+                color = color,
+                alpha = alpha,
+                downAlpha = downAlpha,
+                border = border
+            })
+        end
+
+        VirtualPad.GameplayPad = VirtualPad(keys)
+        VirtualPad._CURRENT = VirtualPad.GameplayPad
+    end
 end
 
 local midX = 1920/2.45

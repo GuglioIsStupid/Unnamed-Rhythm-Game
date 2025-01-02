@@ -16,14 +16,18 @@ function GameScreen:new(data)
         path = "",
         folder = "",
         noteCount = 0,
-        gameMode = "Mania",
+        gameMode = data.game_mode,
         hitObjects = {},
         scrollVelocities = {},
         rating = tonumber(data.difficulty),
     }
 
+    print(self.data.gameMode)
+
     if self.data.gameMode == "Mania" then
         self.GameManager = ManiaManager(self)
+    elseif self.data.gameMode == "FT" then
+        self.GameManager = FTManager(self)
     end
 
     Parsers[self.data.mapType]:parse(self.data.filepath, folderPath)
@@ -34,49 +38,29 @@ function GameScreen:new(data)
     if self.song:getChannelCount() == 4 then
         self.song:setPitch(2)
     end
-    self.GameManager.hitObjects = self.data.hitObjects
-    self.GameManager.scrollVelocities = self.data.scrollVelocities
-    self.GameManager:initSVMarks()
+    if self.data.gameMode == "Mania" then
+        self.GameManager.hitObjects = self.data.hitObjects
+        self.GameManager.scrollVelocities = self.data.scrollVelocities
+        self.GameManager:initSVMarks()
 
-    table.sort(self.GameManager.hitObjects, function(a, b) return a.StartTime < b.StartTime end)
-    self.GameManager.scorePerNote = 1000000 / #self.data.hitObjects
-    self.totalNotes = #self.data.hitObjects
-    
+        table.sort(self.GameManager.hitObjects, function(a, b) return a.StartTime < b.StartTime end)
+        self.GameManager.scorePerNote = 1000000 / #self.data.hitObjects
+        self.totalNotes = #self.data.hitObjects
+    elseif self.data.gameMode == "FT" then
+        self.GameManager.notes = self.data.hitObjects
+
+        table.sort(self.GameManager.notes, function(a, b) return a.StartTime < b.StartTime end)
+        self.GameManager.scorePerNote = 1000000 / #self.GameManager.notes
+        self.totalNotes = #self.GameManager.notes
+    end
+
     if self.data.gameMode == "Mania" then
         self.GameManager:createReceptors(self.data.mode)
+        Script:reset(self.GameManager.receptorsGroup.objects)
+        Script:load(folderPath .. "script/script.lua")
     end
 
-    Script:reset(self.GameManager.receptorsGroup.objects)
-    Script:load(folderPath .. "script/script.lua")
     Script:call("Load")
-
-    -- setup le mobile inputs
-    local curkeylist = GameplayBinds[self.data.mode]
-    if love.system.isMobile() then
-        local keys = {}
-        for i, key in ipairs(string.splitAllChars(curkeylist)) do
-            -- calculate size and position for the mobile button (1920 width, at bottom of screen)
-            local size = {1920 / #curkeylist, 1080 / 2}
-            local position = {(i - 1) * size[1], 1080 - size[2]}
-            local color = {1, 1, 1}
-            local alpha = 0.25
-            local downAlpha = 0.5
-            local border = true
-            
-            table.insert(keys, {
-                key = key,
-                size = size,
-                position = position,
-                color = color,
-                alpha = alpha,
-                downAlpha = downAlpha,
-                border = border
-            })
-        end
-
-        VirtualPad.GameplayPad = VirtualPad(keys)
-        VirtualPad._CURRENT = VirtualPad.GameplayPad
-    end
 
     self.BG = Background(self.data.bgFile)
     self.BG.zorder = -10
@@ -110,17 +94,19 @@ end
 function GameScreen:update(dt)
     State.update(self, dt)
 
-    if not self.calculateScore then
+    if not self.calculateManiaRating then
         return
     end
 
-    self:calculateAccuracy()
-    self:calculateScore()
-    self:calculateRating()
-
-    self.lerpedScore = math.fpsLerp(self.lerpedScore, self.score, 25, dt)
-    self.lerpedAccuracy = math.fpsLerp(self.lerpedAccuracy, self.accuracy, 25, dt)
-    self.lerpedPerformance = math.fpsLerp(self.lerpedPerformance, self.rating, 25, dt)
+    if self.data.gameMode == "Mania" then
+        self:calculateManiaAccuracy()
+        self:calculateManiaScore()
+        self:calculateManiaRating()
+    end
+    
+    self.lerpedScore = math.fpsLerp(self.lerpedScore, self.score or 0, 25, dt)
+    self.lerpedAccuracy = math.fpsLerp(self.lerpedAccuracy, self.accuracy or 1, 25, dt)
+    self.lerpedPerformance = math.fpsLerp(self.lerpedPerformance, self.rating or 0, 25, dt)
     if tostring(self.lerpedScore):match("nan") then
         self.lerpedScore = 0
     end
@@ -133,7 +119,7 @@ function GameScreen:update(dt)
 end
 
 --- Use judgecount and total notes hit to calculate accuracy
-function GameScreen:calculateAccuracy()
+function GameScreen:calculateManiaAccuracy()
     local judgeCount = self.GameManager.judgeCounts
     local totalNotesHit = judgeCount["marvellous"] +
         judgeCount["perfect"] +
@@ -158,7 +144,7 @@ end
 --- 85% of the score is accuracy-based
 --- 
 --- 15% of the score is combo-based
-function GameScreen:calculateScore()
+function GameScreen:calculateManiaScore()
     local leMax = 1000000 * ModifierManager:getScoreMultiplier()
 
     local accScore = self.rated / self.totalNotes * (leMax * 0.85)
@@ -167,7 +153,7 @@ function GameScreen:calculateScore()
     self.score = accScore + comboScore
 end
 
-function GameScreen:calculateRating()
+function GameScreen:calculateManiaRating()
     self.rating = self.data.rating * math.pow(self.accuracy / (95/100), 4.75)
 end
 
