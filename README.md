@@ -9,15 +9,18 @@
 A free, open-sourced rhythm game made in Lua using the LÖVE framework.
 
 ## Table of Contents
-- [About](#about)
-- [Installation](#installation)
-  - [Windows](#windows)
-  - [Linux](#linux)
-  - [MacOS](#macos)
-- [Contributing](#contributing)
-- [License](#license)
-- [Credits](#credits)
-  - [External Contributors](#external-contributors)
+- [Rit](#rit)
+  - [Table of Contents](#table-of-contents)
+  - [About](#about)
+  - [Installation (WIP)](#installation-wip)
+    - [Windows](#windows)
+    - [Linux](#linux)
+    - [MacOS](#macos)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Credits](#credits)
+    - [External Contributors](#external-contributors)
+  - [Libraries](#libraries)
   - [Special Thanks](#special-thanks)
 
 ## About
@@ -33,6 +36,13 @@ Rit is a free, open-sourced rhythm game made in Lua using the LÖVE framework. T
 ### MacOS
 
 ## Contributing
+
+Rit uses a modified version of [LÖVE (V11.5)](https://love2d.org/) available at [this repository](https://github.com/AGORI-Studios/love).
+
+- Recommended IDE: [Visual Studio Code](https://code.visualstudio.com/)
+- - Recommended Extensions:
+- - - [Love2D Support](https://marketplace.visualstudio.com/items?itemName=pixelbyte-studios.pixelbyte-love2d)
+- - - [Lua Language Server](https://marketplace.visualstudio.com/items?itemName=sumneko.lua)
 
 To contribute to this project, please follow the steps below:
 - Maintain a clean and consistent code style
