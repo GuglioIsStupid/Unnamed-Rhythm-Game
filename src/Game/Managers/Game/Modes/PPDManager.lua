@@ -1,10 +1,10 @@
----@class PPDManager
+---@class FTManager
 
-local PPDManager = Group:extend("PPDManager")
+local FTManager = Group:extend("FTManager")
 local GAME = States.Screens.Game
 
-function PPDManager:new(instance)
+function FTManager:new(instance)
     Group.new(self)
 end
 
-return PPDManager
+return FTManager

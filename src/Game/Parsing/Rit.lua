@@ -79,7 +79,7 @@ function Rit:cache(data, filename, path)
     elseif curData.GameMode == 2 then
         gamemode = "Mobile"
     elseif curData.GameMode == 3 then
-        gamemode = "PPD"
+        gamemode = "FT"
     end
     local difficulty, nps = 0, 0
 
@@ -139,7 +139,7 @@ function Rit:parseMetadata(line)
     elseif key == "InitialSV" then
         curData.InitialSV = value
     elseif key == "GameMode" then
-        -- 1 = Mania, 2 = Mobile, 3 = PPD
+        -- 1 = Mania, 2 = Mobile, 3 = FT
         curData.GameMode = value
         if state.instance and state.instance.data then
             state.instance.data.gameMode = value

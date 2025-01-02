@@ -20,7 +20,7 @@ local function setupFolders()
     
     love.filesystem.createDirectory("Data")
     love.filesystem.createDirectory("Beatmaps")
-    love.filesystem.createDirectory("PPDPacks")
+    love.filesystem.createDirectory("FTPacks")
 
     love.filesystem.write("readme.txt", [[
 Folder structure:
@@ -29,7 +29,7 @@ Folder structure:
 - Beatmaps: Contains parsed beatmaps for the game. This folder for storing your beatmaps.
 ]])
 
-    love.filesystem.write("PPDPacks/readme.txt", [[
+    love.filesystem.write("FTPacks/readme.txt", [[
 Folder structure:
 - SongPack
     - mod_pv_db.txt
@@ -43,7 +43,7 @@ Folder structure:
 This layout is strict.
 ]])
 
-    PPDCache:parsePPDPacks("PPDPacks")
+    FTCache:parseFTPacks("FTPacks")
     SongCache:loadSongsPath("Assets/IncludedSongs")
     SongCache:loadSongsPath("Beatmaps")
 end
