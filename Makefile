@@ -22,7 +22,7 @@ win64: lovefile
 	mkdir build/$(GameName)-win64
 
 	wget https://github.com/AGORI-Studios/love/releases/download/11.5-mod.1/love-windows-x64.zip
-	mv -f /love-windows-x64.zip requirements/win64/
+	mv -f ./love-windows-x64.zip requirements/win64/
 	unzip requirements/win64/love-windows-x64.zip -d requirements/win64
 	mv -f requirements/win64/love-windows-x64 requirements/win64/love
 	
@@ -33,7 +33,6 @@ win64: lovefile
 
 	cp requirements/steam_appid.txt build/$(GameName)-win64
 	cp requirements/alsoft.ini build/$(GameName)-win64
-
 
 	cat build/$(GameName)-win64/love.exe build/$(GameName)-lovefile/$(GameName).love > build/$(GameName)-win64/$(GameName).exe
 	rm build/$(GameName)-win64/love.exe
